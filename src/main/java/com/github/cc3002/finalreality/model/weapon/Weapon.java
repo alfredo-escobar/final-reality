@@ -8,7 +8,7 @@ import java.util.Objects;
  * @author Ignacio Slater Muñoz.
  * @author <Your name>
  */
-public class Weapon {
+public abstract class Weapon {
 
   private final String name;
   private final int damage;
@@ -20,8 +20,8 @@ public class Weapon {
    *
    * @see WeaponType
    */
-  public Weapon(final String name, final int damage, final int weight,
-      final WeaponType type) {
+  protected Weapon(final String name, final int damage, final int weight,
+                   final WeaponType type) {
     this.name = name;
     this.damage = damage;
     this.weight = weight;

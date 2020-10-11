@@ -1,6 +1,5 @@
 package com.github.cc3002.finalreality.model.character;
 
-import com.github.cc3002.finalreality.model.character.player.CharacterClass;
 import com.github.cc3002.finalreality.model.character.player.PlayerCharacter;
 import com.github.cc3002.finalreality.model.weapon.Weapon;
 import java.util.concurrent.BlockingQueue;
@@ -20,14 +19,24 @@ public abstract class AbstractCharacter implements ICharacter {
   protected final BlockingQueue<ICharacter> turnsQueue;
   protected final String name;
   private final CharacterClass characterClass;
-  private Weapon equippedWeapon = null;
+  private int health;
+  private int strength;
+  private int defense;
+  protected Weapon equippedWeapon;
   private ScheduledExecutorService scheduledExecutor;
 
-  protected AbstractCharacter(@NotNull BlockingQueue<ICharacter> turnsQueue,
-      @NotNull String name, CharacterClass characterClass) {
+  protected AbstractCharacter(@NotNull String name,
+                              @NotNull BlockingQueue<ICharacter> turnsQueue,
+                              CharacterClass characterClass,
+                              int health, int strength, int defense,
+                              Weapon equippedWeapon) {
     this.turnsQueue = turnsQueue;
     this.name = name;
     this.characterClass = characterClass;
+    this.health = health;
+    this.strength = strength;
+    this.defense = defense;
+    this.equippedWeapon = equippedWeapon;
   }
 
   @Override
@@ -57,13 +66,6 @@ public abstract class AbstractCharacter implements ICharacter {
   }
 
   @Override
-  public void equip(Weapon weapon) {
-    if (this instanceof PlayerCharacter) {
-      this.equippedWeapon = weapon;
-    }
-  }
-
-  @Override
   public Weapon getEquippedWeapon() {
     return equippedWeapon;
   }
@@ -71,5 +73,20 @@ public abstract class AbstractCharacter implements ICharacter {
   @Override
   public CharacterClass getCharacterClass() {
     return characterClass;
+  }
+
+  @Override
+  public int getHealth() {
+    return health;
+  }
+
+  @Override
+  public int getStrength() {
+    return strength;
+  }
+
+  @Override
+  public int getDefense() {
+    return defense;
   }
 }
