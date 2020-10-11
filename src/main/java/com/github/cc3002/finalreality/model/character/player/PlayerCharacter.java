@@ -1,9 +1,12 @@
 package com.github.cc3002.finalreality.model.character.player;
 
 import com.github.cc3002.finalreality.model.character.AbstractCharacter;
+import com.github.cc3002.finalreality.model.character.CharacterClass;
 import com.github.cc3002.finalreality.model.character.ICharacter;
 import java.util.Objects;
 import java.util.concurrent.BlockingQueue;
+
+import com.github.cc3002.finalreality.model.weapon.Weapon;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -12,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
  * @author Ignacio Slater Muñoz.
  * @author <Your name>
  */
-public class PlayerCharacter extends AbstractCharacter {
+public abstract class PlayerCharacter extends AbstractCharacter {
 
   /**
    * Creates a new character.
@@ -24,11 +27,15 @@ public class PlayerCharacter extends AbstractCharacter {
    * @param characterClass
    *     the class of this character
    */
-  public PlayerCharacter(@NotNull String name,
-      @NotNull BlockingQueue<ICharacter> turnsQueue,
-      final CharacterClass characterClass) {
-    super(turnsQueue, name, characterClass);
+  protected PlayerCharacter(@NotNull final String name,
+                            @NotNull BlockingQueue<ICharacter> turnsQueue,
+                            final CharacterClass characterClass,
+                            int health, int strength, int defense,
+                            Weapon equippedWeapon) {
+    super(name, turnsQueue, characterClass, health, strength, defense, equippedWeapon);
   }
+
+  public void equip(Weapon weapon) { this.equippedWeapon = weapon; }
 
   @Override
   public int hashCode() {
