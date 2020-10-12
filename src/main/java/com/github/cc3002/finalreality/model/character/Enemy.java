@@ -29,12 +29,22 @@ public class Enemy extends AbstractCharacter {
     this.weight = weight;
   }
 
+  public Enemy(@NotNull final String name,
+               @NotNull final BlockingQueue<ICharacter> turnsQueue,
+               int health, int strength, int defense,
+               final int weight) {
+    super(name, turnsQueue, CharacterClass.ENEMY, health, strength, defense, null);
+    this.weight = weight;
+  }
+
   /**
    * Returns the weight of this enemy.
    */
   public int getWeight() {
     return weight;
   }
+
+  public void equip(Weapon weapon) { System.out.println("Can't equip weapon to enemy"); }
 
   @Override
   public boolean equals(final Object o) {

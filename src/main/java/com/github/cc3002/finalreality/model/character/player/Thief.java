@@ -15,4 +15,10 @@ public class Thief extends PlayerCharacter {
                  Weapon equippedWeapon) {
         super(name, turnsQueue, CharacterClass.THIEF, health, strength, defense, equippedWeapon);
     }
+
+    public Thief(@NotNull String name,
+                 @NotNull BlockingQueue<ICharacter> turnsQueue,
+                 int health, int strength, int defense) {
+        super(name, turnsQueue, CharacterClass.THIEF, health, strength, defense, null);
+    }
 }

@@ -16,4 +16,11 @@ public class BlackMage extends AbstractMage {
                         int mana) {
         super(name, turnsQueue, CharacterClass.BLACK_MAGE, health, strength, defense, equippedWeapon, mana);
     }
+
+    protected BlackMage(@NotNull String name,
+                        @NotNull BlockingQueue<ICharacter> turnsQueue,
+                        int health, int strength, int defense,
+                        int mana) {
+        super(name, turnsQueue, CharacterClass.BLACK_MAGE, health, strength, defense, null, mana);
+    }
 }

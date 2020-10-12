@@ -15,4 +15,10 @@ public class Knight extends PlayerCharacter {
                   Weapon equippedWeapon) {
         super(name, turnsQueue, CharacterClass.KNIGHT, health, strength, defense, equippedWeapon);
     }
+
+    public Knight(@NotNull String name,
+                  @NotNull BlockingQueue<ICharacter> turnsQueue,
+                  int health, int strength, int defense) {
+        super(name, turnsQueue, CharacterClass.KNIGHT, health, strength, defense, null);
+    }
 }
