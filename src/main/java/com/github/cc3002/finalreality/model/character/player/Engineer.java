@@ -15,4 +15,10 @@ public class Engineer extends PlayerCharacter {
                     Weapon equippedWeapon) {
         super(name, turnsQueue, CharacterClass.ENGINEER, health, strength, defense, equippedWeapon);
     }
+
+    public Engineer(@NotNull String name,
+                    @NotNull BlockingQueue<ICharacter> turnsQueue,
+                    int health, int strength, int defense) {
+        super(name, turnsQueue, CharacterClass.ENGINEER, health, strength, defense, null);
+    }
 }

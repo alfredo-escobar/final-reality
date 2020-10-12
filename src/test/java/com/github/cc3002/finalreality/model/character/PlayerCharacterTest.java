@@ -41,11 +41,11 @@ class PlayerCharacterTest extends AbstractCharacterTest {
     characterNames.put(CharacterClass.ENGINEER, ENGINEER_NAME);
     characterNames.put(CharacterClass.THIEF, THIEF_NAME);
 
-    for (var characterClass :
-        characterNames.keySet()) {
-      testCharacters.add(
-          new PlayerCharacter(characterNames.get(characterClass), turns, characterClass));
-    }
+    testCharacters.add(new BlackMage(BLACK_MAGE_NAME, turns, 7, 8, 9, 10));
+    testCharacters.add(new Knight(KNIGHT_NAME, turns, 7, 8, 9));
+    testCharacters.add(new WhiteMage(WHITE_MAGE_NAME, turns, 7, 8, 9, 10));
+    testCharacters.add(new Engineer(ENGINEER_NAME, turns, 7, 8, 9));
+    testCharacters.add(new Thief(THIEF_NAME, turns, 7, 8, 9));
   }
 
   /**
@@ -53,19 +53,72 @@ class PlayerCharacterTest extends AbstractCharacterTest {
    */
   @Test
   void constructorTest() {
-    var enemy = new Enemy("Enemy", 10, turns);
-    for (var character :
-        testCharacters) {
-      var characterClass = character.getCharacterClass();
-      var characterName = characterNames.get(characterClass);
-      checkConstruction(new PlayerCharacter(characterName, turns, characterClass),
-          character,
-          new PlayerCharacter("Test", turns, characterClass),
-          new PlayerCharacter(characterName, turns,
-              characterClass == CharacterClass.THIEF ? CharacterClass.BLACK_MAGE
-                  : CharacterClass.THIEF));
-      assertNotEquals(character, enemy);
-    }
+    var enemy = new Enemy("Enemy", turns, 7, 8, 9, 10);
+
+    // BlackMage
+    character = testCharacters[0]
+    var characterClass = character.getCharacterClass();
+    var characterName = characterNames.get(characterClass);
+    checkConstruction(new BlackMage(characterName, turns, 7, 8, 9, 10),
+            character,
+            new BlackMage("Test", turns, 7, 8, 9, 10),
+            if (characterClass == CharacterClass.THIEF)
+              new BlackMage(characterName, turns, 7, 8, 9, 10);
+            else
+              new Thief(characterName, turns, 7, 8, 9);
+    assertNotEquals(character, enemy);
+
+    // Knight
+    character = testCharacters[1]
+    var characterClass = character.getCharacterClass();
+    var characterName = characterNames.get(characterClass);
+    checkConstruction(new Knight(characterName, turns, 7, 8, 9),
+            character,
+            new Knight("Test", turns, 7, 8, 9),
+    if (characterClass == CharacterClass.THIEF)
+      new BlackMage(characterName, turns, 7, 8, 9, 10);
+    else
+      new Thief(characterName, turns, 7, 8, 9);
+    assertNotEquals(character, enemy);
+
+    // WhiteMage
+    character = testCharacters[2]
+    var characterClass = character.getCharacterClass();
+    var characterName = characterNames.get(characterClass);
+    checkConstruction(new WhiteMage(characterName, turns, 7, 8, 9, 10),
+            character,
+            new WhiteMage("Test", turns, 7, 8, 9, 10),
+    if (characterClass == CharacterClass.THIEF)
+      new BlackMage(characterName, turns, 7, 8, 9, 10);
+    else
+      new Thief(characterName, turns, 7, 8, 9);
+    assertNotEquals(character, enemy);
+
+    // Engineer
+    character = testCharacters[3]
+    var characterClass = character.getCharacterClass();
+    var characterName = characterNames.get(characterClass);
+    checkConstruction(new Engineer(characterName, turns, 7, 8, 9),
+            character,
+            new Engineer("Test", turns, 7, 8, 9),
+    if (characterClass == CharacterClass.THIEF)
+      new BlackMage(characterName, turns, 7, 8, 9, 10);
+    else
+      new Thief(characterName, turns, 7, 8, 9);
+    assertNotEquals(character, enemy);
+
+    // Thief
+    character = testCharacters[4]
+    var characterClass = character.getCharacterClass();
+    var characterName = characterNames.get(characterClass);
+    checkConstruction(new Thief(characterName, turns, 7, 8, 9),
+            character,
+            new Thief("Test", turns, 7, 8, 9),
+    if (characterClass == CharacterClass.THIEF)
+      new BlackMage(characterName, turns, 7, 8, 9, 10);
+    else
+      new Thief(characterName, turns, 7, 8, 9);
+    assertNotEquals(character, enemy);
 
   }
 

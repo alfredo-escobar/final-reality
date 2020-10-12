@@ -63,7 +63,7 @@ public abstract class AbstractCharacterTest {
 
   protected void basicSetUp() {
     turns = new LinkedBlockingQueue<>();
-    testWeapon = new Weapon("Test", 15, 10, WeaponType.AXE);
+    testWeapon = new Axe("Test", 15, 10);
     testCharacters = new ArrayList<>();
   }
 }
