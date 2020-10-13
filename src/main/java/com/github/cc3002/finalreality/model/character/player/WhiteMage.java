@@ -7,9 +7,33 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.BlockingQueue;
 
+/**
+ * A class that holds all the information of a single white mage of the game.
+ *
+ * @author Ignacio Slater Muñoz
+ * @author Alfredo Escobar Urrea.
+ */
 public class WhiteMage extends AbstractMage {
 
-    protected WhiteMage(@NotNull String name,
+    /**
+     * Creates a new white mage with a weapon equipped.
+     *
+     * @param name
+     *     the character's name
+     * @param turnsQueue
+     *     the queue with the characters waiting for their turn
+     * @param health
+     *     the character's health points
+     * @param strength
+     *     the character's strength
+     * @param defense
+     *     the character's defense
+     * @param equippedWeapon
+     *     the character's initial equipped weapon
+     * @param mana
+     *     the character's mana
+     */
+    public WhiteMage(@NotNull String name,
                         @NotNull BlockingQueue<ICharacter> turnsQueue,
                         int health, int strength, int defense,
                         Weapon equippedWeapon,
@@ -17,7 +41,23 @@ public class WhiteMage extends AbstractMage {
         super(name, turnsQueue, CharacterClass.WHITE_MAGE, health, strength, defense, equippedWeapon, mana);
     }
 
-    protected WhiteMage(@NotNull String name,
+    /**
+     * Creates a new white mage without a weapon equipped.
+     *
+     * @param name
+     *     the character's name
+     * @param turnsQueue
+     *     the queue with the characters waiting for their turn
+     * @param health
+     *     the character's health points
+     * @param strength
+     *     the character's strength
+     * @param defense
+     *     the character's defense
+     * @param mana
+     *     the character's mana
+     */
+    public WhiteMage(@NotNull String name,
                         @NotNull BlockingQueue<ICharacter> turnsQueue,
                         int health, int strength, int defense,
                         int mana) {

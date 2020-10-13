@@ -7,7 +7,7 @@ import com.github.cc3002.finalreality.model.weapon.Weapon;
  * A character can be controlled by the player or by the CPU (an enemy).
  *
  * @author Ignacio Slater Muñoz.
- * @author <Your name>
+ * @author Alfredo Escobar Urrea.
  */
 public interface ICharacter {
 
@@ -37,9 +37,18 @@ public interface ICharacter {
    */
   CharacterClass getCharacterClass();
 
+  /**
+   * Returns this character's health points.
+   */
   int getHealth();
 
+  /**
+   * Returns this character's strength.
+   */
   int getStrength();
 
+  /**
+   * Returns this character's defense.
+   */
   int getDefense();
 }

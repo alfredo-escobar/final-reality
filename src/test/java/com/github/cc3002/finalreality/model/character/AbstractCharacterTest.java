@@ -3,6 +3,7 @@ package com.github.cc3002.finalreality.model.character;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
+import com.github.cc3002.finalreality.model.weapon.Axe;
 import com.github.cc3002.finalreality.model.weapon.Weapon;
 import com.github.cc3002.finalreality.model.weapon.WeaponType;
 import java.util.ArrayList;
@@ -16,7 +17,7 @@ import org.junit.jupiter.api.Test;
  * Abstract class containing the common tests for all the types of characters.
  *
  * @author Ignacio Slater Muñoz.
- * @author <Your name>
+ * @author Alfredo Escobar Urrea.
  * @see ICharacter
  */
 public abstract class AbstractCharacterTest {

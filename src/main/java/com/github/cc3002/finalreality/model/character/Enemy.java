@@ -3,6 +3,7 @@ package com.github.cc3002.finalreality.model.character;
 import java.util.Objects;
 import java.util.concurrent.BlockingQueue;
 
+import com.github.cc3002.finalreality.model.character.player.AbstractMage;
 import com.github.cc3002.finalreality.model.weapon.Weapon;
 import org.jetbrains.annotations.NotNull;
 
@@ -10,15 +11,29 @@ import org.jetbrains.annotations.NotNull;
  * A class that holds all the information of a single enemy of the game.
  *
  * @author Ignacio Slater Muñoz
- * @author <Your name>
+ * @author Alfredo Escobar Urrea.
  */
 public class Enemy extends AbstractCharacter {
 
   private final int weight;
 
   /**
-   * Creates a new enemy with a name, a weight and the queue with the characters ready to
-   * play.
+   * Creates a new enemy with a weapon equipped.
+   *
+   * @param name
+   *     the enemy's name
+   * @param turnsQueue
+   *     the queue with the characters waiting for their turn
+   * @param health
+   *     the enemy's health points
+   * @param strength
+   *     the enemy's strength
+   * @param defense
+   *     the enemy's defense
+   * @param equippedWeapon
+   *     the enemy's equipped weapon
+   * @param weight
+   *     the enemy's weight
    */
   public Enemy(@NotNull final String name,
                @NotNull final BlockingQueue<ICharacter> turnsQueue,
@@ -29,6 +44,22 @@ public class Enemy extends AbstractCharacter {
     this.weight = weight;
   }
 
+  /**
+   * Creates a new enemy without a weapon equipped.
+   *
+   * @param name
+   *     the enemy's name
+   * @param turnsQueue
+   *     the queue with the characters waiting for their turn
+   * @param health
+   *     the enemy's health points
+   * @param strength
+   *     the enemy's strength
+   * @param defense
+   *     the enemy's defense
+   * @param weight
+   *     the enemy's weight
+   */
   public Enemy(@NotNull final String name,
                @NotNull final BlockingQueue<ICharacter> turnsQueue,
                int health, int strength, int defense,
@@ -44,6 +75,7 @@ public class Enemy extends AbstractCharacter {
     return weight;
   }
 
+  @Override
   public void equip(Weapon weapon) { System.out.println("Can't equip weapon to enemy"); }
 
   @Override
@@ -54,12 +86,18 @@ public class Enemy extends AbstractCharacter {
     if (!(o instanceof Enemy)) {
       return false;
     }
-    final Enemy enemy = (Enemy) o;
-    return getWeight() == enemy.getWeight();
+    final Enemy that = (Enemy) o;
+    return getName().equals(that.getName())
+            && getHealth() == that.getHealth()
+            && getStrength() == that.getStrength()
+            && getDefense() == that.getDefense()
+            && getWeight() == that.getWeight();
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(getWeight());
+    return Objects.hash(getCharacterClass(), getName(),
+            getHealth(), getStrength(), getDefense(),
+            getWeight());
   }
 }

@@ -7,8 +7,30 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.BlockingQueue;
 
+/**
+ * A class that holds all the information of a single engineer of the game.
+ *
+ * @author Ignacio Slater Muñoz
+ * @author Alfredo Escobar Urrea.
+ */
 public class Engineer extends PlayerCharacter {
 
+    /**
+     * Creates a new engineer with a weapon equipped.
+     *
+     * @param name
+     *     the character's name
+     * @param turnsQueue
+     *     the queue with the characters waiting for their turn
+     * @param health
+     *     the character's health points
+     * @param strength
+     *     the character's strength
+     * @param defense
+     *     the character's defense
+     * @param equippedWeapon
+     *     the character's initial equipped weapon
+     */
     public Engineer(@NotNull String name,
                     @NotNull BlockingQueue<ICharacter> turnsQueue,
                     int health, int strength, int defense,
@@ -16,6 +38,20 @@ public class Engineer extends PlayerCharacter {
         super(name, turnsQueue, CharacterClass.ENGINEER, health, strength, defense, equippedWeapon);
     }
 
+    /**
+     * Creates a new engineer without a weapon equipped.
+     *
+     * @param name
+     *     the character's name
+     * @param turnsQueue
+     *     the queue with the characters waiting for their turn
+     * @param health
+     *     the character's health points
+     * @param strength
+     *     the character's strength
+     * @param defense
+     *     the character's defense
+     */
     public Engineer(@NotNull String name,
                     @NotNull BlockingQueue<ICharacter> turnsQueue,
                     int health, int strength, int defense) {

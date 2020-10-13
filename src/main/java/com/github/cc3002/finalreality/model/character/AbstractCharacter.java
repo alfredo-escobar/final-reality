@@ -2,6 +2,8 @@ package com.github.cc3002.finalreality.model.character;
 
 import com.github.cc3002.finalreality.model.character.player.PlayerCharacter;
 import com.github.cc3002.finalreality.model.weapon.Weapon;
+
+import java.util.Objects;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -12,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
  * An abstract class that holds the common behaviour of all the characters in the game.
  *
  * @author Ignacio Slater Muñoz.
- * @author <Your name>
+ * @author Alfredo Escobar Urrea.
  */
 public abstract class AbstractCharacter implements ICharacter {
 
@@ -88,5 +90,27 @@ public abstract class AbstractCharacter implements ICharacter {
   @Override
   public int getDefense() {
     return defense;
+  }
+
+  @Override
+  public boolean equals(final Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (!(o instanceof PlayerCharacter)) {
+      return false;
+    }
+    final PlayerCharacter that = (PlayerCharacter) o;
+    return getCharacterClass() == that.getCharacterClass()
+            && getName().equals(that.getName())
+            && getHealth() == that.getHealth()
+            && getStrength() == that.getStrength()
+            && getDefense() == that.getDefense();
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(getCharacterClass(), getName(),
+            getHealth(), getStrength(), getDefense());
   }
 }
