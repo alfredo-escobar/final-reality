@@ -4,9 +4,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-import com.github.cc3002.finalreality.model.character.player.PlayerCharacter;
+import com.github.cc3002.finalreality.model.character.player.*;
+
 import java.util.EnumMap;
 import java.util.Map;
+
+import com.github.cc3002.finalreality.model.weapon.Staff;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -14,7 +17,7 @@ import org.junit.jupiter.api.Test;
  * Set of tests for the {@code GameCharacter} class.
  *
  * @author Ignacio Slater Muñoz.
- * @author <Your name>
+ * @author Alfredo Escobar Urrea.
  * @see PlayerCharacter
  */
 class PlayerCharacterTest extends AbstractCharacterTest {
@@ -25,6 +28,12 @@ class PlayerCharacterTest extends AbstractCharacterTest {
   private static final String ENGINEER_NAME = "Cid";
   private static final String THIEF_NAME = "Zidane";
   private Map<CharacterClass, String> characterNames;
+
+  private ICharacter testBlackMage;
+  private ICharacter testKnight;
+  private ICharacter testWhiteMage;
+  private ICharacter testEngineer;
+  private ICharacter testThief;
 
   /**
    * Setup method.
@@ -41,11 +50,17 @@ class PlayerCharacterTest extends AbstractCharacterTest {
     characterNames.put(CharacterClass.ENGINEER, ENGINEER_NAME);
     characterNames.put(CharacterClass.THIEF, THIEF_NAME);
 
-    testCharacters.add(new BlackMage(BLACK_MAGE_NAME, turns, 7, 8, 9, 10));
-    testCharacters.add(new Knight(KNIGHT_NAME, turns, 7, 8, 9));
-    testCharacters.add(new WhiteMage(WHITE_MAGE_NAME, turns, 7, 8, 9, 10));
-    testCharacters.add(new Engineer(ENGINEER_NAME, turns, 7, 8, 9));
-    testCharacters.add(new Thief(THIEF_NAME, turns, 7, 8, 9));
+    testBlackMage = new BlackMage(BLACK_MAGE_NAME, turns, 7, 8, 9, 10);
+    testKnight = new Knight(KNIGHT_NAME, turns, 7, 8, 9);
+    testWhiteMage = new WhiteMage(WHITE_MAGE_NAME, turns, 7, 8, 9, 10);
+    testEngineer = new Engineer(ENGINEER_NAME, turns, 7, 8, 9);
+    testThief = new Thief(THIEF_NAME, turns, 7, 8, 9);
+
+    testCharacters.add(testBlackMage);
+    testCharacters.add(testKnight);
+    testCharacters.add(testWhiteMage);
+    testCharacters.add(testEngineer);
+    testCharacters.add(testThief);
   }
 
   /**
@@ -54,81 +69,113 @@ class PlayerCharacterTest extends AbstractCharacterTest {
   @Test
   void constructorTest() {
     var enemy = new Enemy("Enemy", turns, 7, 8, 9, 10);
+    CharacterClass characterClass;
+    String characterName;
 
     // BlackMage
-    character = testCharacters[0]
-    var characterClass = character.getCharacterClass();
-    var characterName = characterNames.get(characterClass);
+    characterClass = testBlackMage.getCharacterClass();
+    characterName = characterNames.get(characterClass);
     checkConstruction(new BlackMage(characterName, turns, 7, 8, 9, 10),
-            character,
+            testBlackMage,
             new BlackMage("Test", turns, 7, 8, 9, 10),
-            if (characterClass == CharacterClass.THIEF)
-              new BlackMage(characterName, turns, 7, 8, 9, 10);
-            else
-              new Thief(characterName, turns, 7, 8, 9);
-    assertNotEquals(character, enemy);
+            (characterClass == CharacterClass.THIEF) ?
+              new BlackMage(characterName, turns, 7, 8, 9, 10) :
+              new Thief(characterName, turns, 7, 8, 9));
+    assertNotEquals(testBlackMage, enemy);
 
     // Knight
-    character = testCharacters[1]
-    var characterClass = character.getCharacterClass();
-    var characterName = characterNames.get(characterClass);
+    characterClass = testKnight.getCharacterClass();
+    characterName = characterNames.get(characterClass);
     checkConstruction(new Knight(characterName, turns, 7, 8, 9),
-            character,
+            testKnight,
             new Knight("Test", turns, 7, 8, 9),
-    if (characterClass == CharacterClass.THIEF)
-      new BlackMage(characterName, turns, 7, 8, 9, 10);
-    else
-      new Thief(characterName, turns, 7, 8, 9);
-    assertNotEquals(character, enemy);
+            (characterClass == CharacterClass.THIEF) ?
+                    new BlackMage(characterName, turns, 7, 8, 9, 10) :
+                    new Thief(characterName, turns, 7, 8, 9));
+    assertNotEquals(testKnight, enemy);
 
     // WhiteMage
-    character = testCharacters[2]
-    var characterClass = character.getCharacterClass();
-    var characterName = characterNames.get(characterClass);
+    characterClass = testWhiteMage.getCharacterClass();
+    characterName = characterNames.get(characterClass);
     checkConstruction(new WhiteMage(characterName, turns, 7, 8, 9, 10),
-            character,
+            testWhiteMage,
             new WhiteMage("Test", turns, 7, 8, 9, 10),
-    if (characterClass == CharacterClass.THIEF)
-      new BlackMage(characterName, turns, 7, 8, 9, 10);
-    else
-      new Thief(characterName, turns, 7, 8, 9);
-    assertNotEquals(character, enemy);
+            (characterClass == CharacterClass.THIEF) ?
+                    new BlackMage(characterName, turns, 7, 8, 9, 10) :
+                    new Thief(characterName, turns, 7, 8, 9));
+    assertNotEquals(testWhiteMage, enemy);
 
     // Engineer
-    character = testCharacters[3]
-    var characterClass = character.getCharacterClass();
-    var characterName = characterNames.get(characterClass);
+    characterClass = testEngineer.getCharacterClass();
+    characterName = characterNames.get(characterClass);
     checkConstruction(new Engineer(characterName, turns, 7, 8, 9),
-            character,
+            testEngineer,
             new Engineer("Test", turns, 7, 8, 9),
-    if (characterClass == CharacterClass.THIEF)
-      new BlackMage(characterName, turns, 7, 8, 9, 10);
-    else
-      new Thief(characterName, turns, 7, 8, 9);
-    assertNotEquals(character, enemy);
+            (characterClass == CharacterClass.THIEF) ?
+                    new BlackMage(characterName, turns, 7, 8, 9, 10) :
+                    new Thief(characterName, turns, 7, 8, 9));
+    assertNotEquals(testEngineer, enemy);
 
     // Thief
-    character = testCharacters[4]
-    var characterClass = character.getCharacterClass();
-    var characterName = characterNames.get(characterClass);
+    characterClass = testThief.getCharacterClass();
+    characterName = characterNames.get(characterClass);
     checkConstruction(new Thief(characterName, turns, 7, 8, 9),
-            character,
+            testThief,
             new Thief("Test", turns, 7, 8, 9),
-    if (characterClass == CharacterClass.THIEF)
-      new BlackMage(characterName, turns, 7, 8, 9, 10);
-    else
-      new Thief(characterName, turns, 7, 8, 9);
-    assertNotEquals(character, enemy);
+            (characterClass == CharacterClass.THIEF) ?
+                    new BlackMage(characterName, turns, 7, 8, 9, 10) :
+                    new Thief(characterName, turns, 7, 8, 9));
+    assertNotEquals(testThief, enemy);
 
   }
 
   @Test
   void equipWeaponTest() {
-    for (var character :
-        testCharacters) {
-      assertNull(character.getEquippedWeapon());
-      character.equip(testWeapon);
-      assertEquals(testWeapon, character.getEquippedWeapon());
-    }
+    assertNull(testBlackMage.getEquippedWeapon());
+    testBlackMage.equip(testWeapon);
+    assertEquals(testWeapon, testBlackMage.getEquippedWeapon());
+
+    assertNull(testKnight.getEquippedWeapon());
+    testKnight.equip(testWeapon);
+    assertEquals(testWeapon, testKnight.getEquippedWeapon());
+
+    assertNull(testWhiteMage.getEquippedWeapon());
+    testWhiteMage.equip(testWeapon);
+    assertEquals(testWeapon, testWhiteMage.getEquippedWeapon());
+
+    assertNull(testEngineer.getEquippedWeapon());
+    testEngineer.equip(testWeapon);
+    assertEquals(testWeapon, testEngineer.getEquippedWeapon());
+
+    assertNull(testThief.getEquippedWeapon());
+    testThief.equip(testWeapon);
+    assertEquals(testWeapon, testThief.getEquippedWeapon());
+  }
+
+  @Test
+  void manaTest() {
+    int testMana = 12;
+    BlackMage testBlackMage2 = new BlackMage(BLACK_MAGE_NAME, turns, 7, 8, 9, testMana);
+    assertEquals(testMana, testBlackMage2.getMana());
+    WhiteMage testWhiteMage2 = new WhiteMage(BLACK_MAGE_NAME, turns, 7, 8, 9, testMana);
+    assertEquals(testMana, testWhiteMage2.getMana());
+  }
+
+  @Test
+  void MageEqualBranching() {
+    var differentNameMage = new WhiteMage("Merric", turns, 7, 8, 9, 10);
+    var differentHealthMage = new WhiteMage(WHITE_MAGE_NAME, turns, 10, 8, 9, 10);
+    var differentStrengthMage = new WhiteMage(WHITE_MAGE_NAME, turns, 7, 11, 9, 10);
+    var differentDefenseMage = new WhiteMage(WHITE_MAGE_NAME, turns, 7, 8, 12, 10);
+    var differentManaMage = new WhiteMage(WHITE_MAGE_NAME, turns, 7, 8, 9, 13);
+
+    assertEquals(testWhiteMage, testWhiteMage);
+    assertNotEquals(testWeapon, testWhiteMage);
+    assertNotEquals(testBlackMage, testWhiteMage);
+    assertNotEquals(differentNameMage, testWhiteMage);
+    assertNotEquals(differentHealthMage, testWhiteMage);
+    assertNotEquals(differentStrengthMage, testWhiteMage);
+    assertNotEquals(differentDefenseMage, testWhiteMage);
+    assertNotEquals(differentManaMage, testWhiteMage);
   }
 }

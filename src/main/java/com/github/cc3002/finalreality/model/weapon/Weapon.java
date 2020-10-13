@@ -3,10 +3,10 @@ package com.github.cc3002.finalreality.model.weapon;
 import java.util.Objects;
 
 /**
- * A class that holds all the information of a weapon.
+ * An abstract class that holds the common behaviour of all the weapons in the game.
  *
  * @author Ignacio Slater Muñoz.
- * @author <Your name>
+ * @author Alfredo Escobar Urrea.
  */
 public abstract class Weapon {
 
@@ -15,11 +15,6 @@ public abstract class Weapon {
   private final int weight;
   private final WeaponType type;
 
-  /**
-   * Creates a weapon with a name, a base damage, speed and it's type.
-   *
-   * @see WeaponType
-   */
   protected Weapon(final String name, final int damage, final int weight,
                    final WeaponType type) {
     this.name = name;
@@ -28,19 +23,31 @@ public abstract class Weapon {
     this.type = type;
   }
 
-  private String getName() {
+  /**
+   * Returns this weapon's name.
+   */
+  public String getName() {
     return name;
   }
 
-  private int getDamage() {
+  /**
+   * Returns this weapon's damage points.
+   */
+  public int getDamage() {
     return damage;
   }
 
+  /**
+   * Returns this weapon's weight
+   */
   public int getWeight() {
     return weight;
   }
 
-  private WeaponType getType() {
+  /**
+   * Returns this weapon's type
+   */
+  public WeaponType getType() {
     return type;
   }
 
