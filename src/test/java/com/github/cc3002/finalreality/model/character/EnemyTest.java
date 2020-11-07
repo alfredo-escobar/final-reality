@@ -3,7 +3,7 @@ package com.github.cc3002.finalreality.model.character;
 import com.github.cc3002.finalreality.model.character.player.Knight;
 import com.github.cc3002.finalreality.model.character.player.PlayerCharacter;
 import com.github.cc3002.finalreality.model.character.player.Thief;
-import com.github.cc3002.finalreality.model.weapon.Axe;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -13,19 +13,41 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 class EnemyTest extends AbstractCharacterTest {
 
   private static final String ENEMY_NAME = "Goblin";
+  private ICharacter testEnemy;
 
   @BeforeEach
   void setUp() {
     basicSetUp();
-    testCharacters.add(new Enemy(ENEMY_NAME, turns, 7, 8, 9, 10));
+    testEnemy = new Enemy(ENEMY_NAME, turns, 7, 8, 9, 10);
+  }
+
+  /**
+   * Checks that the character waits the appropriate amount of time for it's turn.
+   */
+  @Test
+  void waitTurnTest() {
+    Assertions.assertTrue(turns.isEmpty());
+    testEnemy.waitTurn();
+    try {
+      // Thread.sleep is not accurate so this values may be changed to adjust the
+      // acceptable error margin.
+      // We're testing that the character waits approximately 1 second.
+      Thread.sleep(900);
+      Assertions.assertEquals(0, turns.size());
+      Thread.sleep(200);
+      Assertions.assertEquals(1, turns.size());
+      Assertions.assertEquals(testEnemy, turns.peek());
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+    }
   }
 
   @Test
   void constructorTest() {
     checkConstruction(new Enemy(ENEMY_NAME, turns, 7, 8, 9, 10),
-        testCharacters.get(0),
-        new Enemy(ENEMY_NAME, turns, 8, 9, 10, 11),
-        new Thief(ENEMY_NAME, turns, 10, 9, 8));
+                      testEnemy,
+                      new Enemy(ENEMY_NAME, turns, 8, 9, 10, 11),
+                      new Thief(ENEMY_NAME, turns, 10, 9, 8));
   }
 
   @Test

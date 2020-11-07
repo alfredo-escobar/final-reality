@@ -1,7 +1,7 @@
 package com.github.cc3002.finalreality.model.character.player;
 
-import com.github.cc3002.finalreality.model.character.CharacterClass;
 import com.github.cc3002.finalreality.model.character.ICharacter;
+import com.github.cc3002.finalreality.model.weapon.IWeapon;
 import com.github.cc3002.finalreality.model.weapon.Weapon;
 import org.jetbrains.annotations.NotNull;
 
@@ -20,11 +20,10 @@ public abstract class AbstractMage extends PlayerCharacter {
 
     protected AbstractMage(@NotNull String name,
                            @NotNull BlockingQueue<ICharacter> turnsQueue,
-                           final CharacterClass characterClass,
                            int health, int strength, int defense,
-                           Weapon equippedWeapon,
+                           IWeapon equippedWeapon,
                            int mana) {
-        super(name, turnsQueue, characterClass, health, strength, defense, equippedWeapon);
+        super(name, turnsQueue, health, strength, defense, equippedWeapon);
         this.mana = mana;
     }
 
@@ -38,22 +37,18 @@ public abstract class AbstractMage extends PlayerCharacter {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof AbstractMage)) {
+        if (o.getClass() != this.getClass()) {
+            return false;
+        }
+        if (!super.equals(o)) {
             return false;
         }
         final AbstractMage that = (AbstractMage) o;
-        return getCharacterClass() == that.getCharacterClass()
-                && getName().equals(that.getName())
-                && getHealth() == that.getHealth()
-                && getStrength() == that.getStrength()
-                && getDefense() == that.getDefense()
-                && getMana() == that.getMana();
+        return getMana() == that.getMana();
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getCharacterClass(), getName(),
-                getHealth(), getStrength(), getDefense(),
-                getMana());
+        return Objects.hash(super.hashCode(), this.getClass(), getMana());
     }
 }

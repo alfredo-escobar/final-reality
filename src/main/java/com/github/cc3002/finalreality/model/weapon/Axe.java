@@ -19,6 +19,6 @@ public class Axe extends Weapon {
      *     the weapon's weight
      */
     public Axe(final String name, final int damage, final int weight) {
-        super(name, damage, weight, WeaponType.AXE);
+        super(name, damage, weight);
     }
 }

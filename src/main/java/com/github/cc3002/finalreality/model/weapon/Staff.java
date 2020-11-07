@@ -26,7 +26,7 @@ public class Staff extends Weapon {
      */
     public Staff(final String name, final int damage, final int weight,
                  final int magicDamage) {
-        super(name, damage, weight, WeaponType.STAFF);
+        super(name, damage, weight);
         this.magicDamage = magicDamage;
     }
 
@@ -45,15 +45,15 @@ public class Staff extends Weapon {
         if (!(o instanceof Staff)) {
             return false;
         }
+        if (!super.equals(o)) {
+            return false;
+        }
         final Staff weapon = (Staff) o;
-        return getDamage() == weapon.getDamage() &&
-                getWeight() == weapon.getWeight() &&
-                getName().equals(weapon.getName()) &&
-                getMagicDamage() == weapon.getMagicDamage();
+        return getMagicDamage() == weapon.getMagicDamage();
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getName(), getDamage(), getWeight(), getType(), getMagicDamage());
+        return Objects.hash(super.hashCode(), Staff.class, getMagicDamage());
     }
 }
