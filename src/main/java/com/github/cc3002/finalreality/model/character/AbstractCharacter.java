@@ -1,8 +1,6 @@
 package com.github.cc3002.finalreality.model.character;
 
 import com.github.cc3002.finalreality.model.character.player.PlayerCharacter;
-import com.github.cc3002.finalreality.model.weapon.Weapon;
-
 import java.util.Objects;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executors;
@@ -18,46 +16,28 @@ import org.jetbrains.annotations.NotNull;
  */
 public abstract class AbstractCharacter implements ICharacter {
 
-  protected final BlockingQueue<ICharacter> turnsQueue;
   protected final String name;
-  private final CharacterClass characterClass;
+  protected final BlockingQueue<ICharacter> turnsQueue;
   private int health;
   private int strength;
   private int defense;
-  protected Weapon equippedWeapon;
-  private ScheduledExecutorService scheduledExecutor;
+
+  protected ScheduledExecutorService scheduledExecutor;
 
   protected AbstractCharacter(@NotNull String name,
                               @NotNull BlockingQueue<ICharacter> turnsQueue,
-                              CharacterClass characterClass,
-                              int health, int strength, int defense,
-                              Weapon equippedWeapon) {
-    this.turnsQueue = turnsQueue;
+                              int health, int strength, int defense) {
     this.name = name;
-    this.characterClass = characterClass;
+    this.turnsQueue = turnsQueue;
     this.health = health;
     this.strength = strength;
     this.defense = defense;
-    this.equippedWeapon = equippedWeapon;
-  }
-
-  @Override
-  public void waitTurn() {
-    scheduledExecutor = Executors.newSingleThreadScheduledExecutor();
-    if (this instanceof PlayerCharacter) {
-      scheduledExecutor
-          .schedule(this::addToQueue, equippedWeapon.getWeight() / 10, TimeUnit.SECONDS);
-    } else {
-      var enemy = (Enemy) this;
-      scheduledExecutor
-          .schedule(this::addToQueue, enemy.getWeight() / 10, TimeUnit.SECONDS);
-    }
   }
 
   /**
    * Adds this character to the turns queue.
    */
-  private void addToQueue() {
+  protected void addToQueue() {
     turnsQueue.add(this);
     scheduledExecutor.shutdown();
   }
@@ -65,16 +45,6 @@ public abstract class AbstractCharacter implements ICharacter {
   @Override
   public String getName() {
     return name;
-  }
-
-  @Override
-  public Weapon getEquippedWeapon() {
-    return equippedWeapon;
-  }
-
-  @Override
-  public CharacterClass getCharacterClass() {
-    return characterClass;
   }
 
   @Override
@@ -97,12 +67,11 @@ public abstract class AbstractCharacter implements ICharacter {
     if (this == o) {
       return true;
     }
-    if (!(o instanceof PlayerCharacter)) {
+    if (o.getClass() != this.getClass()) {
       return false;
     }
-    final PlayerCharacter that = (PlayerCharacter) o;
-    return getCharacterClass() == that.getCharacterClass()
-            && getName().equals(that.getName())
+    final AbstractCharacter that = (AbstractCharacter) o;
+    return getName().equals(that.getName())
             && getHealth() == that.getHealth()
             && getStrength() == that.getStrength()
             && getDefense() == that.getDefense();
@@ -110,7 +79,7 @@ public abstract class AbstractCharacter implements ICharacter {
 
   @Override
   public int hashCode() {
-    return Objects.hash(getCharacterClass(), getName(),
+    return Objects.hash(this.getClass(), getName(),
             getHealth(), getStrength(), getDefense());
   }
 }

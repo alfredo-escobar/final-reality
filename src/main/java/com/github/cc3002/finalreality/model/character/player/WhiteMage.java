@@ -1,7 +1,7 @@
 package com.github.cc3002.finalreality.model.character.player;
 
-import com.github.cc3002.finalreality.model.character.CharacterClass;
 import com.github.cc3002.finalreality.model.character.ICharacter;
+import com.github.cc3002.finalreality.model.weapon.IWeapon;
 import com.github.cc3002.finalreality.model.weapon.Weapon;
 import org.jetbrains.annotations.NotNull;
 
@@ -36,9 +36,9 @@ public class WhiteMage extends AbstractMage {
     public WhiteMage(@NotNull String name,
                         @NotNull BlockingQueue<ICharacter> turnsQueue,
                         int health, int strength, int defense,
-                        Weapon equippedWeapon,
+                        IWeapon equippedWeapon,
                         int mana) {
-        super(name, turnsQueue, CharacterClass.WHITE_MAGE, health, strength, defense, equippedWeapon, mana);
+        super(name, turnsQueue, health, strength, defense, equippedWeapon, mana);
     }
 
     /**
@@ -61,6 +61,6 @@ public class WhiteMage extends AbstractMage {
                         @NotNull BlockingQueue<ICharacter> turnsQueue,
                         int health, int strength, int defense,
                         int mana) {
-        super(name, turnsQueue, CharacterClass.WHITE_MAGE, health, strength, defense, null, mana);
+        super(name, turnsQueue, health, strength, defense, null, mana);
     }
 }

@@ -1,7 +1,7 @@
 package com.github.cc3002.finalreality.model.character.player;
 
-import com.github.cc3002.finalreality.model.character.CharacterClass;
 import com.github.cc3002.finalreality.model.character.ICharacter;
+import com.github.cc3002.finalreality.model.weapon.IWeapon;
 import com.github.cc3002.finalreality.model.weapon.Weapon;
 import org.jetbrains.annotations.NotNull;
 
@@ -34,8 +34,8 @@ public class Knight extends PlayerCharacter {
     public Knight(@NotNull String name,
                   @NotNull BlockingQueue<ICharacter> turnsQueue,
                   int health, int strength, int defense,
-                  Weapon equippedWeapon) {
-        super(name, turnsQueue, CharacterClass.KNIGHT, health, strength, defense, equippedWeapon);
+                  IWeapon equippedWeapon) {
+        super(name, turnsQueue, health, strength, defense, equippedWeapon);
     }
 
     /**
@@ -55,6 +55,6 @@ public class Knight extends PlayerCharacter {
     public Knight(@NotNull String name,
                   @NotNull BlockingQueue<ICharacter> turnsQueue,
                   int health, int strength, int defense) {
-        super(name, turnsQueue, CharacterClass.KNIGHT, health, strength, defense, null);
+        super(name, turnsQueue, health, strength, defense, null);
     }
 }

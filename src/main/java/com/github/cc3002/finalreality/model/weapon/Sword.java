@@ -19,6 +19,6 @@ public class Sword extends Weapon {
      *     the weapon's weight
      */
     public Sword(final String name, final int damage, final int weight) {
-        super(name, damage, weight, WeaponType.SWORD);
+        super(name, damage, weight);
     }
 }

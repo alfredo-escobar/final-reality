@@ -8,47 +8,31 @@ import java.util.Objects;
  * @author Ignacio Slater Muñoz.
  * @author Alfredo Escobar Urrea.
  */
-public abstract class Weapon {
+public abstract class Weapon implements IWeapon{
 
   private final String name;
   private final int damage;
   private final int weight;
-  private final WeaponType type;
 
-  protected Weapon(final String name, final int damage, final int weight,
-                   final WeaponType type) {
+  protected Weapon(final String name, final int damage, final int weight) {
     this.name = name;
     this.damage = damage;
     this.weight = weight;
-    this.type = type;
   }
 
-  /**
-   * Returns this weapon's name.
-   */
+  @Override
   public String getName() {
     return name;
   }
 
-  /**
-   * Returns this weapon's damage points.
-   */
+  @Override
   public int getDamage() {
     return damage;
   }
 
-  /**
-   * Returns this weapon's weight
-   */
+  @Override
   public int getWeight() {
     return weight;
-  }
-
-  /**
-   * Returns this weapon's type
-   */
-  public WeaponType getType() {
-    return type;
   }
 
   @Override
@@ -62,12 +46,11 @@ public abstract class Weapon {
     final Weapon weapon = (Weapon) o;
     return getDamage() == weapon.getDamage() &&
         getWeight() == weapon.getWeight() &&
-        getName().equals(weapon.getName()) &&
-        getType() == weapon.getType();
+        getName().equals(weapon.getName());
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(getName(), getDamage(), getWeight(), getType());
+    return Objects.hash(Weapon.class, getName(), getDamage(), getWeight());
   }
 }
