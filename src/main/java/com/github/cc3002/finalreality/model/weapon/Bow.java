@@ -21,4 +21,14 @@ public class Bow extends Weapon {
     public Bow(final String name, final int damage, final int weight) {
         super(name, damage, weight);
     }
+
+    @Override
+    public boolean canEngineerEquip() {
+        return true;
+    };
+
+    @Override
+    public boolean canThiefEquip() {
+        return true;
+    };
 }

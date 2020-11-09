@@ -3,6 +3,7 @@ package com.github.cc3002.finalreality.model.character;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
+import com.github.cc3002.finalreality.model.AbstractSetUp;
 import com.github.cc3002.finalreality.model.character.player.PlayerCharacter;
 import com.github.cc3002.finalreality.model.weapon.Axe;
 import com.github.cc3002.finalreality.model.weapon.Weapon;
@@ -20,15 +21,7 @@ import org.junit.jupiter.api.Test;
  * @author Alfredo Escobar Urrea.
  * @see ICharacter
  */
-public abstract class AbstractCharacterTest {
-
-  protected BlockingQueue<ICharacter> turns;
-  protected List<ICharacter> testCharacters;
-  protected Weapon testWeapon;
-
-  protected void tryToEquip(PlayerCharacter character) {
-    character.equip(testWeapon);
-  }
+public abstract class AbstractCharacterTest extends AbstractSetUp {
 
   protected void checkConstruction(final ICharacter expectedCharacter,
       final ICharacter testEqualCharacter,
@@ -38,11 +31,5 @@ public abstract class AbstractCharacterTest {
     assertNotEquals(sameClassDifferentCharacter, testEqualCharacter);
     assertNotEquals(testEqualCharacter, differentClassCharacter);
     assertEquals(expectedCharacter.hashCode(), testEqualCharacter.hashCode());
-  }
-
-  protected void basicSetUp() {
-    turns = new LinkedBlockingQueue<>();
-    testWeapon = new Axe("Test", 15, 10);
-    testCharacters = new ArrayList<>();
   }
 }

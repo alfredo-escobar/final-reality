@@ -34,4 +34,11 @@ public interface ICharacter {
    * Returns this character's defense.
    */
   int getDefense();
+
+  /**
+   * Gets this unit attacked
+   * @param damage
+   *     the damage points inflicted by the attacker.
+   */
+  void getAttacked(int damage);
 }

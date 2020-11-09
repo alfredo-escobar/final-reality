@@ -5,6 +5,7 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+import com.github.cc3002.finalreality.model.character.player.IPlayerCharacter;
 import com.github.cc3002.finalreality.model.character.player.PlayerCharacter;
 import org.jetbrains.annotations.NotNull;
 
@@ -47,6 +48,17 @@ public class Enemy extends AbstractCharacter {
    */
   public int getWeight() {
     return weight;
+  }
+
+  /**
+   * Attacks a player character
+   * @param opponent
+   *     the player character to be attacked
+   */
+  public void attack(IPlayerCharacter opponent) {
+    if (((ICharacter)opponent).getHealth() > 0) {
+      ((ICharacter)opponent).getAttacked(this.getStrength());
+    }
   }
 
   @Override

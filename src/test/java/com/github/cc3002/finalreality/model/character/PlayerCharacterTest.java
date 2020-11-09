@@ -18,39 +18,16 @@ import org.junit.jupiter.api.Test;
  */
 class PlayerCharacterTest extends AbstractCharacterTest {
 
-  private static final String BLACK_MAGE_NAME = "Vivi";
-  private static final String KNIGHT_NAME = "Adelbert";
-  private static final String WHITE_MAGE_NAME = "Eiko";
-  private static final String ENGINEER_NAME = "Cid";
-  private static final String THIEF_NAME = "Zidane";
-
-  private ICharacter testBlackMage;
-  private ICharacter testKnight;
-  private ICharacter testWhiteMage;
-  private ICharacter testEngineer;
-  private ICharacter testThief;
-  private ICharacter testEnemy;
-
   /**
    * Setup method.
    * Creates a new character named Vivi with 10 speed and links it to a turn queue.
    */
   @BeforeEach
   void setUp() {
-    super.basicSetUp();
-
-    testBlackMage = new BlackMage(BLACK_MAGE_NAME, turns, 7, 8, 9, 10);
-    testKnight = new Knight(KNIGHT_NAME, turns, 7, 8, 9);
-    testWhiteMage = new WhiteMage(WHITE_MAGE_NAME, turns, 7, 8, 9, 10);
-    testEngineer = new Engineer(ENGINEER_NAME, turns, 7, 8, 9);
-    testThief = new Thief(THIEF_NAME, turns, 7, 8, 9);
-    testEnemy = new Enemy("Enemy", turns, 7, 8, 9, 10);
-
-    testCharacters.add(testBlackMage);
-    testCharacters.add(testKnight);
-    testCharacters.add(testWhiteMage);
-    testCharacters.add(testEngineer);
-    testCharacters.add(testThief);
+    super.setUpTurns();
+    super.setUpPlayerCharacters();
+    super.setUpEnemy();
+    super.setUpWeapons();
   }
 
   /**
@@ -59,8 +36,8 @@ class PlayerCharacterTest extends AbstractCharacterTest {
   @Test
   void waitTurnTest() {
     Assertions.assertTrue(turns.isEmpty());
-    tryToEquip((PlayerCharacter)testCharacters.get(0));
-    testCharacters.get(0).waitTurn();
+    ((IPlayerCharacter)testEngineer).equip(testAxe);
+    testEngineer.waitTurn();
     try {
       // Thread.sleep is not accurate so this values may be changed to adjust the
       // acceptable error margin.
@@ -69,7 +46,7 @@ class PlayerCharacterTest extends AbstractCharacterTest {
       Assertions.assertEquals(0, turns.size());
       Thread.sleep(200);
       Assertions.assertEquals(1, turns.size());
-      Assertions.assertEquals(testCharacters.get(0), turns.peek());
+      Assertions.assertEquals(testEngineer, turns.peek());
     } catch (InterruptedException e) {
       e.printStackTrace();
     }
@@ -124,26 +101,78 @@ class PlayerCharacterTest extends AbstractCharacterTest {
   }
 
   @Test
-  void equipWeaponTest() {
+  void equipBlackMageWeaponTest() {
     assertNull(((IPlayerCharacter)testBlackMage).getEquippedWeapon());
-    ((IPlayerCharacter)testBlackMage).equip(testWeapon);
-    assertEquals(testWeapon, ((IPlayerCharacter)testBlackMage).getEquippedWeapon());
+    ((IPlayerCharacter) testBlackMage).equip(testSword);
+    assertNull(((IPlayerCharacter)testBlackMage).getEquippedWeapon());
+    ((IPlayerCharacter) testBlackMage).equip(testAxe);
+    assertNull(((IPlayerCharacter)testBlackMage).getEquippedWeapon());
+    ((IPlayerCharacter) testBlackMage).equip(testBow);
+    assertNull(((IPlayerCharacter)testBlackMage).getEquippedWeapon());
+    ((IPlayerCharacter) testBlackMage).equip(testKnife);
+    assertEquals(testKnife, ((IPlayerCharacter)testBlackMage).getEquippedWeapon());
+    ((IPlayerCharacter) testBlackMage).equip(testStaff);
+    assertEquals(testStaff, ((IPlayerCharacter)testBlackMage).getEquippedWeapon());
+  }
 
+  @Test
+  void equipKnightWeaponTest() {
     assertNull(((IPlayerCharacter)testKnight).getEquippedWeapon());
-    ((IPlayerCharacter)testKnight).equip(testWeapon);
-    assertEquals(testWeapon, ((IPlayerCharacter)testKnight).getEquippedWeapon());
+    ((IPlayerCharacter)testKnight).equip(testStaff);
+    assertNull(((IPlayerCharacter)testKnight).getEquippedWeapon());
+    ((IPlayerCharacter)testKnight).equip(testBow);
+    assertNull(((IPlayerCharacter)testKnight).getEquippedWeapon());
+    ((IPlayerCharacter)testKnight).equip(testSword);
+    assertEquals(testSword, ((IPlayerCharacter)testKnight).getEquippedWeapon());
+    ((IPlayerCharacter)testKnight).equip(testAxe);
+    assertEquals(testAxe, ((IPlayerCharacter)testKnight).getEquippedWeapon());
+    ((IPlayerCharacter)testKnight).equip(testKnife);
+    assertEquals(testKnife, ((IPlayerCharacter)testKnight).getEquippedWeapon());
+  }
 
+  @Test
+  void equipWhiteMageWeaponTest() {
     assertNull(((IPlayerCharacter)testWhiteMage).getEquippedWeapon());
-    ((IPlayerCharacter)testWhiteMage).equip(testWeapon);
-    assertEquals(testWeapon, ((IPlayerCharacter)testWhiteMage).getEquippedWeapon());
+    ((IPlayerCharacter)testWhiteMage).equip(testSword);
+    assertNull(((IPlayerCharacter)testWhiteMage).getEquippedWeapon());
+    ((IPlayerCharacter)testWhiteMage).equip(testAxe);
+    assertNull(((IPlayerCharacter)testWhiteMage).getEquippedWeapon());
+    ((IPlayerCharacter)testWhiteMage).equip(testKnife);
+    assertNull(((IPlayerCharacter)testWhiteMage).getEquippedWeapon());
+    ((IPlayerCharacter)testWhiteMage).equip(testBow);
+    assertNull(((IPlayerCharacter)testWhiteMage).getEquippedWeapon());
+    ((IPlayerCharacter)testWhiteMage).equip(testStaff);
+    assertEquals(testStaff, ((IPlayerCharacter)testWhiteMage).getEquippedWeapon());
+  }
 
+  @Test
+  void equipEngineerWeaponTest() {
     assertNull(((IPlayerCharacter)testEngineer).getEquippedWeapon());
-    ((IPlayerCharacter)testEngineer).equip(testWeapon);
-    assertEquals(testWeapon, ((IPlayerCharacter)testEngineer).getEquippedWeapon());
+    ((IPlayerCharacter)testEngineer).equip(testSword);
+    assertNull(((IPlayerCharacter)testEngineer).getEquippedWeapon());
+    ((IPlayerCharacter)testEngineer).equip(testKnife);
+    assertNull(((IPlayerCharacter)testEngineer).getEquippedWeapon());
+    ((IPlayerCharacter)testEngineer).equip(testStaff);
+    assertNull(((IPlayerCharacter)testEngineer).getEquippedWeapon());
+    ((IPlayerCharacter)testEngineer).equip(testAxe);
+    assertEquals(testAxe, ((IPlayerCharacter)testEngineer).getEquippedWeapon());
+    ((IPlayerCharacter)testEngineer).equip(testBow);
+    assertEquals(testBow, ((IPlayerCharacter)testEngineer).getEquippedWeapon());
+  }
 
+  @Test
+  void equipThiefWeaponTest() {
     assertNull(((IPlayerCharacter)testThief).getEquippedWeapon());
-    ((IPlayerCharacter)testThief).equip(testWeapon);
-    assertEquals(testWeapon, ((IPlayerCharacter)testThief).getEquippedWeapon());
+    ((IPlayerCharacter)testThief).equip(testAxe);
+    assertNull(((IPlayerCharacter)testThief).getEquippedWeapon());
+    ((IPlayerCharacter)testThief).equip(testStaff);
+    assertNull(((IPlayerCharacter)testThief).getEquippedWeapon());
+    ((IPlayerCharacter)testThief).equip(testSword);
+    assertEquals(testSword, ((IPlayerCharacter)testThief).getEquippedWeapon());
+    ((IPlayerCharacter)testThief).equip(testKnife);
+    assertEquals(testKnife, ((IPlayerCharacter)testThief).getEquippedWeapon());
+    ((IPlayerCharacter)testThief).equip(testBow);
+    assertEquals(testBow, ((IPlayerCharacter)testThief).getEquippedWeapon());
   }
 
   @Test
@@ -164,7 +193,7 @@ class PlayerCharacterTest extends AbstractCharacterTest {
     var differentManaMage = new WhiteMage(WHITE_MAGE_NAME, turns, 7, 8, 9, 13);
 
     assertEquals(testWhiteMage, testWhiteMage);
-    assertNotEquals(testWeapon, testWhiteMage);
+    assertNotEquals(testAxe, testWhiteMage);
     assertNotEquals(testBlackMage, testWhiteMage);
     assertNotEquals(differentNameMage, testWhiteMage);
     assertNotEquals(differentHealthMage, testWhiteMage);

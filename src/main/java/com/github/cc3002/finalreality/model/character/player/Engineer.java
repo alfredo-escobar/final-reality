@@ -57,4 +57,11 @@ public class Engineer extends PlayerCharacter {
                     int health, int strength, int defense) {
         super(name, turnsQueue, health, strength, defense, null);
     }
+
+    @Override
+    public void equip(IWeapon weapon) {
+        if (weapon.canEngineerEquip()) {
+            this.equippedWeapon = weapon;
+        }
+    }
 }

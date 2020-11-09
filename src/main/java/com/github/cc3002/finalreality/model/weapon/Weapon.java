@@ -36,6 +36,36 @@ public abstract class Weapon implements IWeapon{
   }
 
   @Override
+  public boolean canKnightEquip() {
+    return false;
+  };
+
+  @Override
+  public boolean canEngineerEquip() {
+    return false;
+  };
+
+  @Override
+  public boolean canThiefEquip() {
+    return false;
+  };
+
+  @Override
+  public boolean canBlackMageEquip() {
+    return false;
+  };
+
+  @Override
+  public boolean canWhiteMageEquip() {
+    return false;
+  };
+
+  @Override
+  public boolean canAnyCharacterEquip() {
+    return false;
+  };
+
+  @Override
   public boolean equals(final Object o) {
     if (this == o) {
       return true;

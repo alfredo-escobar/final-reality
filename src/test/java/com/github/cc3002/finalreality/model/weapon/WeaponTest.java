@@ -3,6 +3,7 @@ package com.github.cc3002.finalreality.model.weapon;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
+import com.github.cc3002.finalreality.model.AbstractSetUp;
 import com.github.cc3002.finalreality.model.character.ICharacter;
 import com.github.cc3002.finalreality.model.character.player.Knight;
 import org.junit.jupiter.api.BeforeEach;
@@ -10,33 +11,12 @@ import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.BlockingQueue;
 
-class WeaponTest {
-
-  private static final String AXE_NAME = "Test Axe";
-  private static final String STAFF_NAME = "Test Staff";
-  private static final String SWORD_NAME = "Test Sword";
-  private static final String BOW_NAME = "Test Bow";
-  private static final String KNIFE_NAME = "Test Knife";
-  private static final int DAMAGE = 15;
-  private static final int SPEED = 10;
-  private static final int MAGIC_DAMAGE = 12;
-  private static final int MAGIC_DAMAGE_2 = 15;
-
-  private Weapon testAxe;
-  private Weapon testStaff;
-  private Weapon testSword;
-  private Weapon testBow;
-  private Weapon testKnife;
-
-  protected BlockingQueue<ICharacter> turns;
+class WeaponTest extends AbstractSetUp {
 
   @BeforeEach
   void setUp() {
-    testAxe = new Axe(AXE_NAME, DAMAGE, SPEED);
-    testStaff = new Staff(STAFF_NAME, DAMAGE, SPEED, MAGIC_DAMAGE);
-    testSword = new Sword(SWORD_NAME, DAMAGE, SPEED);
-    testBow = new Bow(BOW_NAME, DAMAGE, SPEED);
-    testKnife = new Knife(KNIFE_NAME, DAMAGE, SPEED);
+    super.setUpTurns();
+    super.setUpWeapons();
   }
 
   @Test

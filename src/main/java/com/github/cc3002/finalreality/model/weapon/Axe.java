@@ -21,4 +21,14 @@ public class Axe extends Weapon {
     public Axe(final String name, final int damage, final int weight) {
         super(name, damage, weight);
     }
+
+    @Override
+    public boolean canKnightEquip() {
+        return true;
+    };
+
+    @Override
+    public boolean canEngineerEquip() {
+        return true;
+    };
 }

@@ -12,13 +12,10 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 class EnemyTest extends AbstractCharacterTest {
 
-  private static final String ENEMY_NAME = "Goblin";
-  private ICharacter testEnemy;
-
   @BeforeEach
   void setUp() {
-    basicSetUp();
-    testEnemy = new Enemy(ENEMY_NAME, turns, 7, 8, 9, 10);
+    setUpTurns();
+    setUpEnemy();
   }
 
   /**

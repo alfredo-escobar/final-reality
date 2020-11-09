@@ -56,4 +56,14 @@ public class Staff extends Weapon {
     public int hashCode() {
         return Objects.hash(super.hashCode(), Staff.class, getMagicDamage());
     }
+
+    @Override
+    public boolean canBlackMageEquip() {
+        return true;
+    };
+
+    @Override
+    public boolean canWhiteMageEquip() {
+        return true;
+    };
 }
