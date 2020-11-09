@@ -1,5 +1,6 @@
 package com.github.cc3002.finalreality.model.character.player;
 
+import com.github.cc3002.finalreality.model.character.Enemy;
 import com.github.cc3002.finalreality.model.weapon.IWeapon;
 
 /**
@@ -19,4 +20,11 @@ public interface IPlayerCharacter {
      * Return this character's equipped weapon.
      */
     IWeapon getEquippedWeapon();
+
+    /**
+     * Attacks an enemy
+     * @param opponent
+     *     the enemy to be attacked
+     */
+    void attack(Enemy opponent);
 }

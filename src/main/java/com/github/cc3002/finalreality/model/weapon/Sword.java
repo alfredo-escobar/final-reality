@@ -21,4 +21,14 @@ public class Sword extends Weapon {
     public Sword(final String name, final int damage, final int weight) {
         super(name, damage, weight);
     }
+
+    @Override
+    public boolean canKnightEquip() {
+        return true;
+    };
+
+    @Override
+    public boolean canThiefEquip() {
+        return true;
+    };
 }

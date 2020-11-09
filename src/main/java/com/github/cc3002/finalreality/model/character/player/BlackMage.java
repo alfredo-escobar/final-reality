@@ -63,4 +63,11 @@ public class BlackMage extends AbstractMage {
                         int mana) {
         super(name, turnsQueue, health, strength, defense, null, mana);
     }
+
+    @Override
+    public void equip(IWeapon weapon) {
+        if (weapon.canBlackMageEquip()) {
+            this.equippedWeapon = weapon;
+        }
+    }
 }

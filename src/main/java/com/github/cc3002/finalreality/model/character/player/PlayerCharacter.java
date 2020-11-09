@@ -1,6 +1,7 @@
 package com.github.cc3002.finalreality.model.character.player;
 
 import com.github.cc3002.finalreality.model.character.AbstractCharacter;
+import com.github.cc3002.finalreality.model.character.Enemy;
 import com.github.cc3002.finalreality.model.character.ICharacter;
 
 import java.util.Objects;
@@ -31,11 +32,26 @@ public abstract class PlayerCharacter extends AbstractCharacter implements IPlay
   }
 
   @Override
-  public void equip(IWeapon weapon) { this.equippedWeapon = weapon; }
+  public void equip(IWeapon weapon) {
+    if (weapon.canAnyCharacterEquip()) {
+      this.equippedWeapon = weapon;
+    }
+  }
 
   @Override
   public IWeapon getEquippedWeapon() {
     return equippedWeapon;
+  }
+
+  @Override
+  public void attack(Enemy opponent) {
+    if (opponent.getHealth() > 0) {
+      if (this.equippedWeapon == null) {
+        opponent.getAttacked(this.getStrength());
+      } else {
+        opponent.getAttacked(this.getStrength() + this.equippedWeapon.getDamage());
+      }
+    }
   }
 
   @Override
