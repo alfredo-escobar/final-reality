@@ -89,7 +89,7 @@ public abstract class AbstractCharacter implements ICharacter {
 
   @Override
   public int hashCode() {
-    return Objects.hash(this.getClass(), getName(),
+    return Objects.hash(AbstractCharacter.class, getName(),
             getHealth(), getStrength(), getDefense());
   }
 }

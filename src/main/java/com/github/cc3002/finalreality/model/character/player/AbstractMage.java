@@ -49,6 +49,6 @@ public abstract class AbstractMage extends PlayerCharacter {
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), this.getClass(), getMana());
+        return Objects.hash(super.hashCode(), AbstractMage.class, getMana());
     }
 }

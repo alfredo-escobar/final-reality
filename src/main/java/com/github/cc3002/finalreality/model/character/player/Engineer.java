@@ -5,6 +5,7 @@ import com.github.cc3002.finalreality.model.weapon.IWeapon;
 import com.github.cc3002.finalreality.model.weapon.Weapon;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Objects;
 import java.util.concurrent.BlockingQueue;
 
 /**
@@ -63,5 +64,10 @@ public class Engineer extends PlayerCharacter {
         if (weapon.canEngineerEquip()) {
             this.equippedWeapon = weapon;
         }
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), Engineer.class);
     }
 }

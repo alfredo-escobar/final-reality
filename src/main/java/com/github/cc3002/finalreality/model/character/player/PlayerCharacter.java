@@ -21,14 +21,16 @@ import org.jetbrains.annotations.NotNull;
  */
 public abstract class PlayerCharacter extends AbstractCharacter implements IPlayerCharacter {
 
-  protected IWeapon equippedWeapon;
+  protected IWeapon equippedWeapon=null;
 
   protected PlayerCharacter(@NotNull final String name,
                             @NotNull BlockingQueue<ICharacter> turnsQueue,
                             int health, int strength, int defense,
-                            IWeapon equippedWeapon) {
+                            IWeapon weapon) {
     super(name, turnsQueue, health, strength, defense);
-    this.equippedWeapon = equippedWeapon;
+    if (weapon!=null) {
+      this.equip(weapon);
+    }
   }
 
   @Override
@@ -77,6 +79,6 @@ public abstract class PlayerCharacter extends AbstractCharacter implements IPlay
 
   @Override
   public int hashCode() {
-    return Objects.hash(super.hashCode(), this.getClass(), getEquippedWeapon());
+    return Objects.hash(super.hashCode(), PlayerCharacter.class, getEquippedWeapon());
   }
 }
