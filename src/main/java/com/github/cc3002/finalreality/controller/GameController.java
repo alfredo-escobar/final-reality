@@ -22,52 +22,52 @@ public class GameController {
     public GameController() {}
 
     public void addKnight(final String name,
-                          int health, int strength, int defense) {
+                          int health, int defense) {
         if (party.size() < 4) {
-            party.add(new Knight(name, turns, health, strength, defense));
+            party.add(new Knight(name, turns, health, defense));
             ((AbstractCharacter)(party.get(party.size() - 1))).addListener(handler);
         }
     }
 
     public void addEngineer(final String name,
-                            int health, int strength, int defense) {
+                            int health, int defense) {
         if (party.size() < 4) {
-            party.add(new Engineer(name, turns, health, strength, defense));
+            party.add(new Engineer(name, turns, health, defense));
             ((AbstractCharacter)(party.get(party.size() - 1))).addListener(handler);
         }
     }
 
     public void addThief(final String name,
-                         int health, int strength, int defense) {
+                         int health, int defense) {
         if (party.size() < 4) {
-            party.add(new Thief(name, turns, health, strength, defense));
+            party.add(new Thief(name, turns, health, defense));
             ((AbstractCharacter)(party.get(party.size() - 1))).addListener(handler);
         }
     }
 
     public void addBlackMage(final String name,
-                             int health, int strength, int defense,
+                             int health, int defense,
                              int mana) {
         if (party.size() < 4) {
-            party.add(new BlackMage(name, turns, health, strength, defense, mana));
+            party.add(new BlackMage(name, turns, health, defense, mana));
             ((AbstractCharacter)(party.get(party.size() - 1))).addListener(handler);
         }
     }
 
     public void addWhiteMage(final String name,
-                             int health, int strength, int defense,
+                             int health, int defense,
                              int mana) {
         if (party.size() < 4) {
-            party.add(new WhiteMage(name, turns, health, strength, defense, mana));
+            party.add(new WhiteMage(name, turns, health, defense, mana));
             ((AbstractCharacter)(party.get(party.size() - 1))).addListener(handler);
         }
     }
 
     public void addEnemy(final String name,
-                         int health, int strength, int defense,
-                         final int weight) {
+                         int health, int defense,
+                         int strength, int weight) {
         if (enemies.size() < 6) {
-            enemies.add(new Enemy(name, turns, health, strength, defense, weight));
+            enemies.add(new Enemy(name, turns, health, defense, strength, weight));
             enemies.get(enemies.size() - 1).addListener(handler);
         }
     }
@@ -101,20 +101,16 @@ public class GameController {
         return ((AbstractCharacter)(party.get(index))).getHealth();
     }
 
-    public int getPlayerCharacterStrength(int index) {
-        return ((AbstractCharacter)(party.get(index))).getStrength();
-    }
-
     public int getPlayerCharacterDefense(int index) {
         return ((AbstractCharacter)(party.get(index))).getDefense();
     }
 
-    public int getPlayerCharacterMana(int index) {
-        return ((AbstractMage)(party.get(index))).getMana();
-    }
-
     public IWeapon getPlayerCharacterWeapon(int index) {
         return party.get(index).getEquippedWeapon();
+    }
+
+    public int getPlayerCharacterMana(int index) {
+        return ((AbstractMage)(party.get(index))).getMana();
     }
 
     public String getEnemyName(int index) {
@@ -125,12 +121,12 @@ public class GameController {
         return ((AbstractCharacter)(enemies.get(index))).getHealth();
     }
 
-    public int getEnemyStrength(int index) {
-        return ((AbstractCharacter)(enemies.get(index))).getStrength();
-    }
-
     public int getEnemyDefense(int index) {
         return ((AbstractCharacter)(enemies.get(index))).getDefense();
+    }
+
+    public int getEnemyStrength(int index) {
+        return enemies.get(index).getStrength();
     }
 
     public int getEnemyWeight(int index) {

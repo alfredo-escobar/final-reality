@@ -26,11 +26,6 @@ public interface ICharacter {
   int getHealth();
 
   /**
-   * Returns this character's strength.
-   */
-  int getStrength();
-
-  /**
    * Returns this character's defense.
    */
   int getDefense();

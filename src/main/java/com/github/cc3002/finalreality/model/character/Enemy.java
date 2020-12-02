@@ -17,6 +17,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public class Enemy extends AbstractCharacter {
 
+  private int strength;
   private final int weight;
 
   /**
@@ -37,10 +38,18 @@ public class Enemy extends AbstractCharacter {
    */
   public Enemy(@NotNull final String name,
                @NotNull final BlockingQueue<ICharacter> turnsQueue,
-               int health, int strength, int defense,
-               final int weight) {
-    super(name, turnsQueue, health, strength, defense);
+               int health, int defense,
+               int strength, final int weight) {
+    super(name, turnsQueue, health, defense);
+    this.strength = strength;
     this.weight = weight;
+  }
+
+  /**
+   * Returns the strength of this enemy.
+   */
+  public int getStrength() {
+    return strength;
   }
 
   /**
@@ -82,11 +91,12 @@ public class Enemy extends AbstractCharacter {
       return false;
     }
     final Enemy that = (Enemy) o;
-    return getWeight() == that.getWeight();
+    return getStrength() == that.getStrength()
+            && getWeight() == that.getWeight();
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(super.hashCode(), Enemy.class, getWeight());
+    return Objects.hash(super.hashCode(), Enemy.class, getStrength(), getWeight());
   }
 }

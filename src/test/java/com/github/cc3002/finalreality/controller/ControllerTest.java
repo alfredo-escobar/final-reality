@@ -14,13 +14,13 @@ class ControllerTest {
     void setUp() {
         controller = new GameController();
 
-        controller.addKnight("Draug", 8, 3, 2);
-        controller.addWhiteMage("Lena", 7, 8, 9, 10);
-        controller.addEngineer("Jake", 7, 8, 9);
-        controller.addThief("Julian", 7, 8, 9);
+        controller.addKnight("Draug", 8, 2);
+        controller.addWhiteMage("Lena", 7, 9, 10);
+        controller.addEngineer("Jake", 7, 9);
+        controller.addThief("Julian", 7, 9);
 
-        controller.addEnemy("Gharnef", 8, 7, 4, 10);
-        controller.addEnemy("Medeus", 10, 9, 6, 12);
+        controller.addEnemy("Gharnef", 8, 4, 7, 10);
+        controller.addEnemy("Medeus", 10, 6, 9, 12);
 
         controller.addSword("Mercurius", 6, 10);
         controller.addAxe("Hauteclere", 6, 10);
@@ -36,6 +36,6 @@ class ControllerTest {
         assertEquals(8, controller.getEnemyHealth(0));
         controller.equipToCharacter(0, 0);
         controller.attackAnEnemy(0, 0);
-        assertEquals(3, controller.getEnemyHealth(0));
+        assertEquals(6, controller.getEnemyHealth(0));
     }
 }

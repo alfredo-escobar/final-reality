@@ -25,10 +25,10 @@ public abstract class PlayerCharacter extends AbstractCharacter implements IPlay
 
   protected PlayerCharacter(@NotNull final String name,
                             @NotNull BlockingQueue<ICharacter> turnsQueue,
-                            int health, int strength, int defense,
+                            int health, int defense,
                             IWeapon weapon) {
-    super(name, turnsQueue, health, strength, defense);
-    if (weapon!=null) {
+    super(name, turnsQueue, health, defense);
+    if (weapon != null) {
       this.equip(weapon);
     }
   }
@@ -49,14 +49,12 @@ public abstract class PlayerCharacter extends AbstractCharacter implements IPlay
 
   @Override
   public void attack(Enemy opponent) {
-    if (opponent.getHealth() > 0) {
-      if (this.equippedWeapon == null) {
-        opponent.getAttacked(this.getStrength());
-      } else {
-        opponent.getAttacked(this.getStrength() + this.equippedWeapon.getDamage());
-      }
-      if (opponent.getHealth() == 0) {
-        event.firePropertyChange("Enemy defeated", null, opponent);
+    if (this.equippedWeapon != null) {
+      if (opponent.getHealth() > 0) {
+        opponent.getAttacked(this.equippedWeapon.getDamage());
+        if (opponent.getHealth() == 0) {
+          event.firePropertyChange("Enemy defeated", null, opponent);
+        }
       }
     }
   }

@@ -21,11 +21,11 @@ class WeaponTest extends AbstractSetUp {
 
   @Test
   void constructorTest() {
-    var expectedAxe = new Axe(AXE_NAME, DAMAGE, SPEED);
-    var expectedStaff = new Staff(STAFF_NAME, DAMAGE, SPEED, MAGIC_DAMAGE);
-    var expectedSword = new Sword(SWORD_NAME, DAMAGE, SPEED);
-    var expectedBow = new Bow(BOW_NAME, DAMAGE, SPEED);
-    var expectedKnife = new Knife(KNIFE_NAME, DAMAGE, SPEED);
+    var expectedAxe = new Axe(AXE_NAME, DAMAGE, WEIGHT);
+    var expectedStaff = new Staff(STAFF_NAME, DAMAGE, WEIGHT, MAGIC_DAMAGE);
+    var expectedSword = new Sword(SWORD_NAME, DAMAGE, WEIGHT);
+    var expectedBow = new Bow(BOW_NAME, DAMAGE, WEIGHT);
+    var expectedKnife = new Knife(KNIFE_NAME, DAMAGE, WEIGHT);
 
     assertEquals(expectedAxe, testAxe);
     assertEquals(expectedAxe.hashCode(), testAxe.hashCode());
@@ -41,10 +41,10 @@ class WeaponTest extends AbstractSetUp {
 
   @Test
   void WeaponEqualBranching() {
-    var differentNameAxe = new Axe("Hauteclaire", DAMAGE, SPEED);
-    var differentDamageAxe = new Axe(AXE_NAME, 13, SPEED);
+    var differentNameAxe = new Axe("Hauteclere", DAMAGE, WEIGHT);
+    var differentDamageAxe = new Axe(AXE_NAME, 13, WEIGHT);
     var differentSpeedAxe = new Axe(AXE_NAME, DAMAGE, 8);
-    var testKnight = new Knight("Jagen", turns, 5, 20, 18);
+    var testKnight = new Knight("Jagen", turns, 5, 18);
 
     assertEquals(testAxe, testAxe);
     assertNotEquals(testKnight, testAxe);
@@ -56,10 +56,10 @@ class WeaponTest extends AbstractSetUp {
 
   @Test
   void StaffEqualBranching() {
-    var differentNameStaff = new Staff("Wooden Staff", DAMAGE, SPEED, MAGIC_DAMAGE);
-    var differentDamageStaff = new Staff(STAFF_NAME, 13, SPEED, MAGIC_DAMAGE);
+    var differentNameStaff = new Staff("Wooden Staff", DAMAGE, WEIGHT, MAGIC_DAMAGE);
+    var differentDamageStaff = new Staff(STAFF_NAME, 13, WEIGHT, MAGIC_DAMAGE);
     var differentSpeedStaff = new Staff(STAFF_NAME, DAMAGE, 8, MAGIC_DAMAGE);
-    var differentMagDamageStaff = new Staff(STAFF_NAME, DAMAGE, SPEED, 10);
+    var differentMagDamageStaff = new Staff(STAFF_NAME, DAMAGE, WEIGHT, 10);
 
     assertNotEquals(differentNameStaff, testStaff);
     assertNotEquals(differentDamageStaff, testStaff);
@@ -70,7 +70,7 @@ class WeaponTest extends AbstractSetUp {
 
   @Test
   void staffMagicDamageTest() {
-    Staff testStaff2 = new Staff("Wooden Staff", DAMAGE, SPEED, MAGIC_DAMAGE_2);
+    Staff testStaff2 = new Staff("Wooden Staff", DAMAGE, WEIGHT, MAGIC_DAMAGE_2);
     assertEquals(MAGIC_DAMAGE_2, testStaff2.getMagicDamage());
   }
 }
