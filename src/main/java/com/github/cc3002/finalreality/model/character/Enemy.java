@@ -58,6 +58,9 @@ public class Enemy extends AbstractCharacter {
   public void attack(IPlayerCharacter opponent) {
     if (((ICharacter)opponent).getHealth() > 0) {
       ((ICharacter)opponent).getAttacked(this.getStrength());
+      if (((ICharacter)opponent).getHealth() == 0) {
+        event.firePropertyChange("Player character defeated", null, opponent);
+      }
     }
   }
 

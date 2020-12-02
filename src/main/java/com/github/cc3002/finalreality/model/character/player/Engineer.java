@@ -60,10 +60,12 @@ public class Engineer extends PlayerCharacter {
     }
 
     @Override
-    public void equip(IWeapon weapon) {
+    public boolean equip(IWeapon weapon) {
         if (weapon.canEngineerEquip()) {
             this.equippedWeapon = weapon;
+            return true;
         }
+        return false;
     }
 
     @Override

@@ -66,10 +66,12 @@ public class WhiteMage extends AbstractMage {
     }
 
     @Override
-    public void equip(IWeapon weapon) {
+    public boolean equip(IWeapon weapon) {
         if (weapon.canWhiteMageEquip()) {
             this.equippedWeapon = weapon;
+            return true;
         }
+        return false;
     }
 
     @Override

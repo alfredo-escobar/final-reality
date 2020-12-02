@@ -21,7 +21,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public abstract class PlayerCharacter extends AbstractCharacter implements IPlayerCharacter {
 
-  protected IWeapon equippedWeapon=null;
+  protected IWeapon equippedWeapon = null;
 
   protected PlayerCharacter(@NotNull final String name,
                             @NotNull BlockingQueue<ICharacter> turnsQueue,
@@ -34,10 +34,12 @@ public abstract class PlayerCharacter extends AbstractCharacter implements IPlay
   }
 
   @Override
-  public void equip(IWeapon weapon) {
-    if (weapon.canAnyCharacterEquip()) {
+  public boolean equip(IWeapon weapon) {
+    if (weapon.canGenericCharacterEquip()) {
       this.equippedWeapon = weapon;
+      return true;
     }
+    return false;
   }
 
   @Override
@@ -52,6 +54,9 @@ public abstract class PlayerCharacter extends AbstractCharacter implements IPlay
         opponent.getAttacked(this.getStrength());
       } else {
         opponent.getAttacked(this.getStrength() + this.equippedWeapon.getDamage());
+      }
+      if (opponent.getHealth() == 0) {
+        event.firePropertyChange("Enemy defeated", null, opponent);
       }
     }
   }

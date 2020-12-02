@@ -1,6 +1,9 @@
 package com.github.cc3002.finalreality.model.character;
 
+import com.github.cc3002.finalreality.controller.IEventHandler;
 import com.github.cc3002.finalreality.model.character.player.PlayerCharacter;
+
+import java.beans.PropertyChangeSupport;
 import java.util.Objects;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executors;
@@ -23,6 +26,7 @@ public abstract class AbstractCharacter implements ICharacter {
   private int defense;
 
   protected ScheduledExecutorService scheduledExecutor;
+  protected final PropertyChangeSupport event = new PropertyChangeSupport(this);
 
   protected AbstractCharacter(@NotNull String name,
                               @NotNull BlockingQueue<ICharacter> turnsQueue,
@@ -40,6 +44,9 @@ public abstract class AbstractCharacter implements ICharacter {
   protected void addToQueue() {
     turnsQueue.add(this);
     scheduledExecutor.shutdown();
+    if (turnsQueue.size() == 1) {
+      event.firePropertyChange("Start of turn", null, this);
+    }
   }
 
   @Override
@@ -91,5 +98,9 @@ public abstract class AbstractCharacter implements ICharacter {
   public int hashCode() {
     return Objects.hash(AbstractCharacter.class, getName(),
             getHealth(), getStrength(), getDefense());
+  }
+
+  public void addListener(IEventHandler handler) {
+    event.addPropertyChangeListener(handler);
   }
 }
