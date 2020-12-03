@@ -1,6 +1,9 @@
 package com.github.cc3002.finalreality.model.character;
 
+import com.github.cc3002.finalreality.controller.IEventHandler;
 import com.github.cc3002.finalreality.model.character.player.PlayerCharacter;
+
+import java.beans.PropertyChangeSupport;
 import java.util.Objects;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executors;
@@ -19,18 +22,17 @@ public abstract class AbstractCharacter implements ICharacter {
   protected final String name;
   protected final BlockingQueue<ICharacter> turnsQueue;
   private int health;
-  private int strength;
   private int defense;
 
   protected ScheduledExecutorService scheduledExecutor;
+  protected final PropertyChangeSupport event = new PropertyChangeSupport(this);
 
   protected AbstractCharacter(@NotNull String name,
                               @NotNull BlockingQueue<ICharacter> turnsQueue,
-                              int health, int strength, int defense) {
+                              int health, int defense) {
     this.name = name;
     this.turnsQueue = turnsQueue;
     this.health = health;
-    this.strength = strength;
     this.defense = defense;
   }
 
@@ -39,6 +41,9 @@ public abstract class AbstractCharacter implements ICharacter {
    */
   protected void addToQueue() {
     turnsQueue.add(this);
+    if (turnsQueue.size() == 1) {
+      event.firePropertyChange("Start of turn", null, this);
+    }
     scheduledExecutor.shutdown();
   }
 
@@ -50,11 +55,6 @@ public abstract class AbstractCharacter implements ICharacter {
   @Override
   public int getHealth() {
     return health;
-  }
-
-  @Override
-  public int getStrength() {
-    return strength;
   }
 
   @Override
@@ -83,13 +83,17 @@ public abstract class AbstractCharacter implements ICharacter {
     final AbstractCharacter that = (AbstractCharacter) o;
     return getName().equals(that.getName())
             && getHealth() == that.getHealth()
-            && getStrength() == that.getStrength()
             && getDefense() == that.getDefense();
   }
 
   @Override
   public int hashCode() {
     return Objects.hash(AbstractCharacter.class, getName(),
-            getHealth(), getStrength(), getDefense());
+            getHealth(), getDefense());
+  }
+
+  @Override
+  public void addListener(IEventHandler handler) {
+    event.addPropertyChangeListener(handler);
   }
 }

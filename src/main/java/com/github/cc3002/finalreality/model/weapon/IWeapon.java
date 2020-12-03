@@ -53,8 +53,8 @@ public interface IWeapon {
   boolean canWhiteMageEquip();
 
   /**
-   * Returns true if any player character can equip this weapon,
-   * returns false otherwise.
+   * Returns false if a newly implemented player character
+   * class can't equip this weapon.
    */
-  boolean canAnyCharacterEquip();
+  boolean canGenericCharacterEquip();
 }

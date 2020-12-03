@@ -61,7 +61,7 @@ public abstract class Weapon implements IWeapon{
   };
 
   @Override
-  public boolean canAnyCharacterEquip() {
+  public boolean canGenericCharacterEquip() {
     return false;
   };
 
