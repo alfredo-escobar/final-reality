@@ -1,45 +1,68 @@
 package com.github.cc3002.finalreality.model.character.player;
 
 import com.github.cc3002.finalreality.model.character.AbstractCharacter;
-import com.github.cc3002.finalreality.model.character.CharacterClass;
+import com.github.cc3002.finalreality.model.character.Enemy;
 import com.github.cc3002.finalreality.model.character.ICharacter;
+
 import java.util.Objects;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
-import com.github.cc3002.finalreality.model.weapon.Weapon;
+import com.github.cc3002.finalreality.model.weapon.IWeapon;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * A class that holds all the information of a single character of the game.
+ * An abstract class that holds the common behaviour of all playable characters
+ * in the game.
  *
  * @author Ignacio Slater Muñoz.
- * @author <Your name>
+ * @author Alfredo Escobar Urrea.
  */
-public abstract class PlayerCharacter extends AbstractCharacter {
+public abstract class PlayerCharacter extends AbstractCharacter implements IPlayerCharacter {
 
-  /**
-   * Creates a new character.
-   *
-   * @param name
-   *     the character's name
-   * @param turnsQueue
-   *     the queue with the characters waiting for their turn
-   * @param characterClass
-   *     the class of this character
-   */
+  protected IWeapon equippedWeapon = null;
+
   protected PlayerCharacter(@NotNull final String name,
                             @NotNull BlockingQueue<ICharacter> turnsQueue,
-                            final CharacterClass characterClass,
-                            int health, int strength, int defense,
-                            Weapon equippedWeapon) {
-    super(name, turnsQueue, characterClass, health, strength, defense, equippedWeapon);
+                            int health, int defense,
+                            IWeapon weapon) {
+    super(name, turnsQueue, health, defense);
+    if (weapon != null) {
+      this.equip(weapon);
+    }
   }
 
-  public void equip(Weapon weapon) { this.equippedWeapon = weapon; }
+  @Override
+  public boolean equip(IWeapon weapon) {
+    if (weapon.canGenericCharacterEquip()) {
+      this.equippedWeapon = weapon;
+      return true;
+    }
+    return false;
+  }
 
   @Override
-  public int hashCode() {
-    return Objects.hash(getCharacterClass());
+  public IWeapon getEquippedWeapon() {
+    return equippedWeapon;
+  }
+
+  @Override
+  public void attack(Enemy opponent) {
+    if (this.equippedWeapon != null) {
+      if (opponent.getHealth() > 0) {
+        opponent.getAttacked(this.equippedWeapon.getDamage());
+        if (opponent.getHealth() == 0) {
+          event.firePropertyChange("Enemy defeated", null, opponent);
+        }
+      }
+    }
+  }
+
+  @Override
+  public void waitTurn() {
+    scheduledExecutor = Executors.newSingleThreadScheduledExecutor();
+    scheduledExecutor.schedule(this::addToQueue, equippedWeapon.getWeight() / 10, TimeUnit.SECONDS);
   }
 
   @Override
@@ -47,11 +70,18 @@ public abstract class PlayerCharacter extends AbstractCharacter {
     if (this == o) {
       return true;
     }
-    if (!(o instanceof PlayerCharacter)) {
+    if (o.getClass() != this.getClass()) {
+      return false;
+    }
+    if (!super.equals(o)) {
       return false;
     }
     final PlayerCharacter that = (PlayerCharacter) o;
-    return getCharacterClass() == that.getCharacterClass()
-        && getName().equals(that.getName());
+    return Objects.equals(getEquippedWeapon(), that.getEquippedWeapon());
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(super.hashCode(), PlayerCharacter.class, getEquippedWeapon());
   }
 }

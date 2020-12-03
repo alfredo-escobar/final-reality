@@ -1,7 +1,10 @@
 package com.github.cc3002.finalreality.model.character;
 
+import com.github.cc3002.finalreality.controller.IEventHandler;
 import com.github.cc3002.finalreality.model.character.player.PlayerCharacter;
-import com.github.cc3002.finalreality.model.weapon.Weapon;
+
+import java.beans.PropertyChangeSupport;
+import java.util.Objects;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -12,51 +15,35 @@ import org.jetbrains.annotations.NotNull;
  * An abstract class that holds the common behaviour of all the characters in the game.
  *
  * @author Ignacio Slater Muñoz.
- * @author <Your name>
+ * @author Alfredo Escobar Urrea.
  */
 public abstract class AbstractCharacter implements ICharacter {
 
-  protected final BlockingQueue<ICharacter> turnsQueue;
   protected final String name;
-  private final CharacterClass characterClass;
+  protected final BlockingQueue<ICharacter> turnsQueue;
   private int health;
-  private int strength;
   private int defense;
-  protected Weapon equippedWeapon;
-  private ScheduledExecutorService scheduledExecutor;
+
+  protected ScheduledExecutorService scheduledExecutor;
+  protected final PropertyChangeSupport event = new PropertyChangeSupport(this);
 
   protected AbstractCharacter(@NotNull String name,
                               @NotNull BlockingQueue<ICharacter> turnsQueue,
-                              CharacterClass characterClass,
-                              int health, int strength, int defense,
-                              Weapon equippedWeapon) {
-    this.turnsQueue = turnsQueue;
+                              int health, int defense) {
     this.name = name;
-    this.characterClass = characterClass;
+    this.turnsQueue = turnsQueue;
     this.health = health;
-    this.strength = strength;
     this.defense = defense;
-    this.equippedWeapon = equippedWeapon;
-  }
-
-  @Override
-  public void waitTurn() {
-    scheduledExecutor = Executors.newSingleThreadScheduledExecutor();
-    if (this instanceof PlayerCharacter) {
-      scheduledExecutor
-          .schedule(this::addToQueue, equippedWeapon.getWeight() / 10, TimeUnit.SECONDS);
-    } else {
-      var enemy = (Enemy) this;
-      scheduledExecutor
-          .schedule(this::addToQueue, enemy.getWeight() / 10, TimeUnit.SECONDS);
-    }
   }
 
   /**
    * Adds this character to the turns queue.
    */
-  private void addToQueue() {
+  protected void addToQueue() {
     turnsQueue.add(this);
+    if (turnsQueue.size() == 1) {
+      event.firePropertyChange("Start of turn", null, this);
+    }
     scheduledExecutor.shutdown();
   }
 
@@ -66,27 +53,47 @@ public abstract class AbstractCharacter implements ICharacter {
   }
 
   @Override
-  public Weapon getEquippedWeapon() {
-    return equippedWeapon;
-  }
-
-  @Override
-  public CharacterClass getCharacterClass() {
-    return characterClass;
-  }
-
-  @Override
   public int getHealth() {
     return health;
   }
 
   @Override
-  public int getStrength() {
-    return strength;
+  public int getDefense() {
+    return defense;
   }
 
   @Override
-  public int getDefense() {
-    return defense;
+  public void getAttacked(int damage) {
+    if ((damage - this.defense)>0) {
+      this.health -= (damage - this.defense);
+      if (this.health < 0) {
+        this.health = 0;
+      }
+    }
+  }
+
+  @Override
+  public boolean equals(final Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o.getClass() != this.getClass()) {
+      return false;
+    }
+    final AbstractCharacter that = (AbstractCharacter) o;
+    return getName().equals(that.getName())
+            && getHealth() == that.getHealth()
+            && getDefense() == that.getDefense();
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(AbstractCharacter.class, getName(),
+            getHealth(), getDefense());
+  }
+
+  @Override
+  public void addListener(IEventHandler handler) {
+    event.addPropertyChangeListener(handler);
   }
 }

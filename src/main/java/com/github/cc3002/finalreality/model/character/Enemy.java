@@ -2,39 +2,54 @@ package com.github.cc3002.finalreality.model.character;
 
 import java.util.Objects;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
-import com.github.cc3002.finalreality.model.weapon.Weapon;
+import com.github.cc3002.finalreality.model.character.player.IPlayerCharacter;
+import com.github.cc3002.finalreality.model.character.player.PlayerCharacter;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * A class that holds all the information of a single enemy of the game.
  *
  * @author Ignacio Slater Muñoz
- * @author <Your name>
+ * @author Alfredo Escobar Urrea.
  */
 public class Enemy extends AbstractCharacter {
 
+  private int strength;
   private final int weight;
 
   /**
-   * Creates a new enemy with a name, a weight and the queue with the characters ready to
-   * play.
+   * Creates a new enemy.
+   *
+   * @param name
+   *     the enemy's name
+   * @param turnsQueue
+   *     the queue with the characters waiting for their turn
+   * @param health
+   *     the enemy's health points
+   * @param strength
+   *     the enemy's strength
+   * @param defense
+   *     the enemy's defense
+   * @param weight
+   *     the enemy's weight
    */
   public Enemy(@NotNull final String name,
                @NotNull final BlockingQueue<ICharacter> turnsQueue,
-               int health, int strength, int defense,
-               final Weapon equippedWeapon,
-               final int weight) {
-    super(name, turnsQueue, CharacterClass.ENEMY, health, strength, defense, equippedWeapon);
+               int health, int defense,
+               int strength, final int weight) {
+    super(name, turnsQueue, health, defense);
+    this.strength = strength;
     this.weight = weight;
   }
 
-  public Enemy(@NotNull final String name,
-               @NotNull final BlockingQueue<ICharacter> turnsQueue,
-               int health, int strength, int defense,
-               final int weight) {
-    super(name, turnsQueue, CharacterClass.ENEMY, health, strength, defense, null);
-    this.weight = weight;
+  /**
+   * Returns the strength of this enemy.
+   */
+  public int getStrength() {
+    return strength;
   }
 
   /**
@@ -44,7 +59,25 @@ public class Enemy extends AbstractCharacter {
     return weight;
   }
 
-  public void equip(Weapon weapon) { System.out.println("Can't equip weapon to enemy"); }
+  /**
+   * Attacks a player character
+   * @param opponent
+   *     the player character to be attacked
+   */
+  public void attack(IPlayerCharacter opponent) {
+    if (((ICharacter)opponent).getHealth() > 0) {
+      ((ICharacter)opponent).getAttacked(this.getStrength());
+      if (((ICharacter)opponent).getHealth() == 0) {
+        event.firePropertyChange("Player character defeated", null, opponent);
+      }
+    }
+  }
+
+  @Override
+  public void waitTurn() {
+    scheduledExecutor = Executors.newSingleThreadScheduledExecutor();
+    scheduledExecutor.schedule(this::addToQueue, this.getWeight() / 10, TimeUnit.SECONDS);
+  }
 
   @Override
   public boolean equals(final Object o) {
@@ -54,12 +87,16 @@ public class Enemy extends AbstractCharacter {
     if (!(o instanceof Enemy)) {
       return false;
     }
-    final Enemy enemy = (Enemy) o;
-    return getWeight() == enemy.getWeight();
+    if (!super.equals(o)) {
+      return false;
+    }
+    final Enemy that = (Enemy) o;
+    return getStrength() == that.getStrength()
+            && getWeight() == that.getWeight();
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(getWeight());
+    return Objects.hash(super.hashCode(), Enemy.class, getStrength(), getWeight());
   }
 }

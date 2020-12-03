@@ -1,42 +1,31 @@
 package com.github.cc3002.finalreality.model.weapon;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
+import com.github.cc3002.finalreality.model.AbstractSetUp;
+import com.github.cc3002.finalreality.model.character.ICharacter;
+import com.github.cc3002.finalreality.model.character.player.Knight;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-class WeaponTest {
+import java.util.concurrent.BlockingQueue;
 
-  private static final String AXE_NAME = "Test Axe";
-  private static final String STAFF_NAME = "Test Staff";
-  private static final String SWORD_NAME = "Test Sword";
-  private static final String BOW_NAME = "Test Bow";
-  private static final String KNIFE_NAME = "Test Knife";
-  private static final int DAMAGE = 15;
-  private static final int SPEED = 10;
-
-  private Weapon testAxe;
-  private Weapon testStaff;
-  private Weapon testSword;
-  private Weapon testBow;
-  private Weapon testKnife;
+class WeaponTest extends AbstractSetUp {
 
   @BeforeEach
   void setUp() {
-    testAxe = new Axe(AXE_NAME, DAMAGE, SPEED);
-    testStaff = new Staff(STAFF_NAME, DAMAGE, SPEED);
-    testSword = new Sword(SWORD_NAME, DAMAGE, SPEED);
-    testBow = new Bow(BOW_NAME, DAMAGE, SPEED);
-    testKnife = new Knife(KNIFE_NAME, DAMAGE, SPEED);
+    super.setUpTurns();
+    super.setUpWeapons();
   }
 
   @Test
   void constructorTest() {
-    var expectedAxe = new Axe(AXE_NAME, DAMAGE, SPEED);
-    var expectedStaff = new Staff(STAFF_NAME, DAMAGE, SPEED);
-    var expectedSword = new Sword(SWORD_NAME, DAMAGE, SPEED);
-    var expectedBow = new Bow(BOW_NAME, DAMAGE, SPEED);
-    var expectedKnife = new Knife(KNIFE_NAME, DAMAGE, SPEED);
+    var expectedAxe = new Axe(AXE_NAME, DAMAGE, WEIGHT);
+    var expectedStaff = new Staff(STAFF_NAME, DAMAGE, WEIGHT, MAGIC_DAMAGE);
+    var expectedSword = new Sword(SWORD_NAME, DAMAGE, WEIGHT);
+    var expectedBow = new Bow(BOW_NAME, DAMAGE, WEIGHT);
+    var expectedKnife = new Knife(KNIFE_NAME, DAMAGE, WEIGHT);
 
     assertEquals(expectedAxe, testAxe);
     assertEquals(expectedAxe.hashCode(), testAxe.hashCode());
@@ -48,5 +37,40 @@ class WeaponTest {
     assertEquals(expectedBow.hashCode(), testBow.hashCode());
     assertEquals(expectedKnife, testKnife);
     assertEquals(expectedKnife.hashCode(), testKnife.hashCode());
+  }
+
+  @Test
+  void WeaponEqualBranching() {
+    var differentNameAxe = new Axe("Hauteclere", DAMAGE, WEIGHT);
+    var differentDamageAxe = new Axe(AXE_NAME, 13, WEIGHT);
+    var differentSpeedAxe = new Axe(AXE_NAME, DAMAGE, 8);
+    var testKnight = new Knight("Jagen", turns, 5, 18);
+
+    assertEquals(testAxe, testAxe);
+    assertNotEquals(testKnight, testAxe);
+    assertNotEquals(differentNameAxe, testAxe);
+    assertNotEquals(differentDamageAxe, testAxe);
+    assertNotEquals(differentSpeedAxe, testAxe);
+    assertNotEquals(testSword, testAxe);
+  }
+
+  @Test
+  void StaffEqualBranching() {
+    var differentNameStaff = new Staff("Wooden Staff", DAMAGE, WEIGHT, MAGIC_DAMAGE);
+    var differentDamageStaff = new Staff(STAFF_NAME, 13, WEIGHT, MAGIC_DAMAGE);
+    var differentSpeedStaff = new Staff(STAFF_NAME, DAMAGE, 8, MAGIC_DAMAGE);
+    var differentMagDamageStaff = new Staff(STAFF_NAME, DAMAGE, WEIGHT, 10);
+
+    assertNotEquals(differentNameStaff, testStaff);
+    assertNotEquals(differentDamageStaff, testStaff);
+    assertNotEquals(differentSpeedStaff, testStaff);
+    assertNotEquals(differentMagDamageStaff, testStaff);
+    assertNotEquals(testSword, testStaff);
+  }
+
+  @Test
+  void staffMagicDamageTest() {
+    Staff testStaff2 = new Staff("Wooden Staff", DAMAGE, WEIGHT, MAGIC_DAMAGE_2);
+    assertEquals(MAGIC_DAMAGE_2, testStaff2.getMagicDamage());
   }
 }
