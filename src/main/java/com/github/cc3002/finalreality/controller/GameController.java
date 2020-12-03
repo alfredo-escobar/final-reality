@@ -1,8 +1,5 @@
 package com.github.cc3002.finalreality.controller;
 
-import com.github.cc3002.finalreality.controller.states.PartyReady;
-import com.github.cc3002.finalreality.controller.states.PreparingParty;
-import com.github.cc3002.finalreality.controller.states.State;
 import com.github.cc3002.finalreality.model.character.AbstractCharacter;
 import com.github.cc3002.finalreality.model.character.Enemy;
 import com.github.cc3002.finalreality.model.character.ICharacter;
@@ -23,11 +20,10 @@ public class GameController {
     private final ArrayList<Enemy> enemies = new ArrayList<>();
     private final ArrayList<IWeapon> inventory = new ArrayList<>();
     private final IEventHandler handler = new Handler(this);
-    private State state;
 
     protected BlockingQueue<ICharacter> turns;
-    // private ICharacter currentCharacter = null;
 
+<<<<<<< HEAD
     /**
      * Creates a new controller and sets its initial
      * state as "preparing party".
@@ -78,21 +74,19 @@ public class GameController {
     public boolean isBattleLost() {
         return state.isBattleLost();
     }
+=======
+    public GameController() {}
+>>>>>>> parent of 21d0950... Estados y coverage
 
     /**
      * Adds a knight with the given parameters
      * to the party.
      */
     public void addKnight(final String name,
-                          int health, int defense,
-                          IWeapon weapon) {
-        if (state.isPreparingParty()) {
-            party.add(new Knight(name, turns, health, defense, weapon));
-            ((ICharacter)(party.get(party.size() - 1))).addListener(handler);
-            ((ICharacter)(party.get(party.size() - 1))).waitTurn();
-            if (party.size() == 4) {
-                state.ready();
-            }
+                          int health, int defense) {
+        if (party.size() < 4) {
+            party.add(new Knight(name, turns, health, defense));
+            ((AbstractCharacter)(party.get(party.size() - 1))).addListener(handler);
         }
     }
 
@@ -101,15 +95,10 @@ public class GameController {
      * to the party.
      */
     public void addEngineer(final String name,
-                            int health, int defense,
-                            IWeapon weapon) {
-        if (state.isPreparingParty()) {
-            party.add(new Engineer(name, turns, health, defense, weapon));
-            ((ICharacter)(party.get(party.size() - 1))).addListener(handler);
-            ((ICharacter)(party.get(party.size() - 1))).waitTurn();
-            if (party.size() == 4) {
-                state.ready();
-            }
+                            int health, int defense) {
+        if (party.size() < 4) {
+            party.add(new Engineer(name, turns, health, defense));
+            ((AbstractCharacter)(party.get(party.size() - 1))).addListener(handler);
         }
     }
 
@@ -118,15 +107,10 @@ public class GameController {
      * to the party.
      */
     public void addThief(final String name,
-                         int health, int defense,
-                         IWeapon weapon) {
-        if (state.isPreparingParty()) {
-            party.add(new Thief(name, turns, health, defense, weapon));
-            ((ICharacter)(party.get(party.size() - 1))).addListener(handler);
-            ((ICharacter)(party.get(party.size() - 1))).waitTurn();
-            if (party.size() == 4) {
-                state.ready();
-            }
+                         int health, int defense) {
+        if (party.size() < 4) {
+            party.add(new Thief(name, turns, health, defense));
+            ((AbstractCharacter)(party.get(party.size() - 1))).addListener(handler);
         }
     }
 
@@ -136,15 +120,10 @@ public class GameController {
      */
     public void addBlackMage(final String name,
                              int health, int defense,
-                             IWeapon weapon,
                              int mana) {
-        if (state.isPreparingParty()) {
-            party.add(new BlackMage(name, turns, health, defense, weapon, mana));
-            ((ICharacter)(party.get(party.size() - 1))).addListener(handler);
-            ((ICharacter)(party.get(party.size() - 1))).waitTurn();
-            if (party.size() == 4) {
-                state.ready();
-            }
+        if (party.size() < 4) {
+            party.add(new BlackMage(name, turns, health, defense, mana));
+            ((AbstractCharacter)(party.get(party.size() - 1))).addListener(handler);
         }
     }
 
@@ -154,15 +133,10 @@ public class GameController {
      */
     public void addWhiteMage(final String name,
                              int health, int defense,
-                             IWeapon weapon,
                              int mana) {
-        if (state.isPreparingParty()) {
-            party.add(new WhiteMage(name, turns, health, defense, weapon, mana));
-            ((ICharacter)(party.get(party.size() - 1))).addListener(handler);
-            ((ICharacter)(party.get(party.size() - 1))).waitTurn();
-            if (party.size() == 4) {
-                state.ready();
-            }
+        if (party.size() < 4) {
+            party.add(new WhiteMage(name, turns, health, defense, mana));
+            ((AbstractCharacter)(party.get(party.size() - 1))).addListener(handler);
         }
     }
 
@@ -176,7 +150,6 @@ public class GameController {
         if (enemies.size() < 6) {
             enemies.add(new Enemy(name, turns, health, defense, strength, weight));
             enemies.get(enemies.size() - 1).addListener(handler);
-            enemies.get(enemies.size() - 1).waitTurn();
         }
     }
 
@@ -331,6 +304,7 @@ public class GameController {
         return inventory.get(index).getName();
     }
 
+<<<<<<< HEAD
     /**
      * Returns the damage of the weapon
      * on a given position of the inventory.
@@ -338,6 +312,9 @@ public class GameController {
      *      the position of the weapon
      */
     public int getWeaponDamage(int index) {
+=======
+    public int getEnemyDamage(int index) {
+>>>>>>> parent of 21d0950... Estados y coverage
         return inventory.get(index).getDamage();
     }
 
@@ -406,17 +383,13 @@ public class GameController {
      * makes it do an action
      */
     public void startTurn() {
-        if (state.isPartyReady()) {
-            var character = turns.poll();
-            if (party.contains(character)) {
-                // User action
-                // this.currentCharacter = character;
-            } else if (enemies.contains(character)) {
-                // CPU action
-                // this.currentCharacter = character;
-            }
-            endTurn(character);
+        var character = turns.poll();
+        if (party.contains(character)) {
+            // User action
+        } else if (enemies.contains(character)) {
+            // CPU action
         }
+        endTurn(character);
     }
 
     /**
@@ -433,6 +406,7 @@ public class GameController {
         character.waitTurn();
     }
 
+<<<<<<< HEAD
 //    public ICharacter getCurrentCharacter() {
 //        return this.currentCharacter;
 //    }
@@ -443,10 +417,12 @@ public class GameController {
      * @param character
      *      the defeated player character
      */
+=======
+>>>>>>> parent of 21d0950... Estados y coverage
     public void onPlayerCharacterDefeat(IPlayerCharacter character) {
         party.remove(character);
         if (party.size() == 0) {
-            state.lose();
+            System.out.println("You lost");
         }
     }
 
@@ -460,7 +436,7 @@ public class GameController {
     public void onEnemyDefeat(Enemy character) {
         enemies.remove(character);
         if (enemies.size() == 0) {
-            state.win();
+            System.out.println("You won");
         }
     }
 }

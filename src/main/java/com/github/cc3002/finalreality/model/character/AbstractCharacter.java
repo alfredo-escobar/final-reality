@@ -41,10 +41,10 @@ public abstract class AbstractCharacter implements ICharacter {
    */
   protected void addToQueue() {
     turnsQueue.add(this);
+    scheduledExecutor.shutdown();
     if (turnsQueue.size() == 1) {
       event.firePropertyChange("Start of turn", null, this);
     }
-    scheduledExecutor.shutdown();
   }
 
   @Override
@@ -92,7 +92,6 @@ public abstract class AbstractCharacter implements ICharacter {
             getHealth(), getDefense());
   }
 
-  @Override
   public void addListener(IEventHandler handler) {
     event.addPropertyChangeListener(handler);
   }
