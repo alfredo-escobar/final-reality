@@ -20,8 +20,6 @@ For this project, I've assumed that characters won't level up during a battle se
 attributes (HP, Strength, Defense, etc) will remain constant, so they can be used to generate hash keys
 and to determine whether two characters are the same or not.
 
-Weapon exclusivity to each class hasn't been implemented yet.
-
 ---
 
 First, an abstract class (AbstractCharacter) has been defined in order to collect the common elements
@@ -39,3 +37,7 @@ that the classes corresponding to specific magical units can extend this abstrac
 Finally, for the weapons, we have the abstract class Weapon that defines shared attributes such as name,
 damage and weight. For each specific type of weapon, a public class that extends Weapon has been defined.
 The Staff weapons take advantage of this, as they can now have their own magicDamage attribute.
+
+--
+
+For this version of the project, a Thief can equip swords, knives and bows.

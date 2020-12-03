@@ -25,8 +25,6 @@ public class Thief extends PlayerCharacter {
      *     the queue with the characters waiting for their turn
      * @param health
      *     the character's health points
-     * @param strength
-     *     the character's strength
      * @param defense
      *     the character's defense
      * @param equippedWeapon
@@ -34,9 +32,9 @@ public class Thief extends PlayerCharacter {
      */
     public Thief(@NotNull String name,
                  @NotNull BlockingQueue<ICharacter> turnsQueue,
-                 int health, int strength, int defense,
+                 int health, int defense,
                  IWeapon equippedWeapon) {
-        super(name, turnsQueue, health, strength, defense, equippedWeapon);
+        super(name, turnsQueue, health, defense, equippedWeapon);
     }
 
     /**
@@ -48,22 +46,22 @@ public class Thief extends PlayerCharacter {
      *     the queue with the characters waiting for their turn
      * @param health
      *     the character's health points
-     * @param strength
-     *     the character's strength
      * @param defense
      *     the character's defense
      */
     public Thief(@NotNull String name,
                  @NotNull BlockingQueue<ICharacter> turnsQueue,
-                 int health, int strength, int defense) {
-        super(name, turnsQueue, health, strength, defense, null);
+                 int health, int defense) {
+        super(name, turnsQueue, health, defense, null);
     }
 
     @Override
-    public void equip(IWeapon weapon) {
+    public boolean equip(IWeapon weapon) {
         if (weapon.canThiefEquip()) {
             this.equippedWeapon = weapon;
+            return true;
         }
+        return false;
     }
 
     @Override
