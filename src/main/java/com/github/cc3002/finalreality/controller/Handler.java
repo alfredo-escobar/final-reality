@@ -25,10 +25,10 @@ public class Handler implements IEventHandler {
         if (evt.getPropertyName().equals("Start of turn")) {
             controller.startTurn();
         }
-        if (evt.getPropertyName().equals("Player character defeated")) {
+        else if (evt.getPropertyName().equals("Player character defeated")) {
             controller.onPlayerCharacterDefeat((IPlayerCharacter) evt.getNewValue());
         }
-        if (evt.getPropertyName().equals("Enemy defeated")) {
+        else if (evt.getPropertyName().equals("Enemy defeated")) {
             controller.onEnemyDefeat((Enemy) evt.getNewValue());
         }
 
