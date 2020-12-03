@@ -25,8 +25,6 @@ public class WhiteMage extends AbstractMage {
      *     the queue with the characters waiting for their turn
      * @param health
      *     the character's health points
-     * @param strength
-     *     the character's strength
      * @param defense
      *     the character's defense
      * @param equippedWeapon
@@ -36,10 +34,10 @@ public class WhiteMage extends AbstractMage {
      */
     public WhiteMage(@NotNull String name,
                         @NotNull BlockingQueue<ICharacter> turnsQueue,
-                        int health, int strength, int defense,
+                        int health, int defense,
                         IWeapon equippedWeapon,
                         int mana) {
-        super(name, turnsQueue, health, strength, defense, equippedWeapon, mana);
+        super(name, turnsQueue, health, defense, equippedWeapon, mana);
     }
 
     /**
@@ -51,8 +49,6 @@ public class WhiteMage extends AbstractMage {
      *     the queue with the characters waiting for their turn
      * @param health
      *     the character's health points
-     * @param strength
-     *     the character's strength
      * @param defense
      *     the character's defense
      * @param mana
@@ -60,16 +56,18 @@ public class WhiteMage extends AbstractMage {
      */
     public WhiteMage(@NotNull String name,
                         @NotNull BlockingQueue<ICharacter> turnsQueue,
-                        int health, int strength, int defense,
+                        int health, int defense,
                         int mana) {
-        super(name, turnsQueue, health, strength, defense, null, mana);
+        super(name, turnsQueue, health, defense, null, mana);
     }
 
     @Override
-    public void equip(IWeapon weapon) {
+    public boolean equip(IWeapon weapon) {
         if (weapon.canWhiteMageEquip()) {
             this.equippedWeapon = weapon;
+            return true;
         }
+        return false;
     }
 
     @Override
