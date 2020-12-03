@@ -18,31 +18,32 @@ import org.junit.jupiter.api.Test;
  */
 class AttackTest extends AbstractSetUp {
     private int KnightHealth = 8;
+    private int KnightStrength = 3;
     private int KnightDefense = 2;
 
     private int EnemyHealth = 8;
     private int EnemyStrength = 7;
     private int EnemyDefense = 4;
 
-    private int SwordDamage = 9;
+    private int SwordDamage = 6;
 
     @BeforeEach
     void setUp() {
         super.setUpTurns();
-        testKnight = new Knight(KNIGHT_NAME, turns, KnightHealth, KnightDefense);
-        testEnemy = new Enemy(ENEMY_NAME, turns, EnemyHealth, EnemyDefense, EnemyStrength, 10);
-        testSword = new Sword(SWORD_NAME, SwordDamage, WEIGHT);
+        testKnight = new Knight(KNIGHT_NAME, turns, KnightHealth, KnightStrength, KnightDefense);
+        testEnemy = new Enemy(ENEMY_NAME, turns, EnemyHealth, EnemyStrength, EnemyDefense, 10);
+        testSword = new Sword(SWORD_NAME, SwordDamage, SPEED);
     }
 
     @Test
     void KnightAttacksEnemy() {
         assertEquals(testEnemy.getHealth(), EnemyHealth);
-        ((IPlayerCharacter)testKnight).attack((Enemy)testEnemy); // Unsuccessful attack
+        ((IPlayerCharacter)testKnight).attack((Enemy)testEnemy); // No damage taken
         assertEquals(EnemyHealth, testEnemy.getHealth());
 
         ((IPlayerCharacter)testKnight).equip(testSword);
         ((IPlayerCharacter)testKnight).attack(((Enemy)testEnemy)); // 5 HP lost
-        assertEquals(EnemyHealth - (SwordDamage-EnemyDefense), testEnemy.getHealth());
+        assertEquals(EnemyHealth - (KnightStrength+SwordDamage-EnemyDefense), testEnemy.getHealth());
 
         ((IPlayerCharacter)testKnight).attack(((Enemy)testEnemy)); // Enemy defeated
         assertEquals(0, testEnemy.getHealth());

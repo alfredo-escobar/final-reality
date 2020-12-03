@@ -20,10 +20,10 @@ public abstract class AbstractMage extends PlayerCharacter {
 
     protected AbstractMage(@NotNull String name,
                            @NotNull BlockingQueue<ICharacter> turnsQueue,
-                           int health, int defense,
+                           int health, int strength, int defense,
                            IWeapon equippedWeapon,
                            int mana) {
-        super(name, turnsQueue, health, defense, equippedWeapon);
+        super(name, turnsQueue, health, strength, defense, equippedWeapon);
         this.mana = mana;
     }
 

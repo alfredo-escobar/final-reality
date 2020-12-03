@@ -25,6 +25,8 @@ public class Engineer extends PlayerCharacter {
      *     the queue with the characters waiting for their turn
      * @param health
      *     the character's health points
+     * @param strength
+     *     the character's strength
      * @param defense
      *     the character's defense
      * @param equippedWeapon
@@ -32,9 +34,9 @@ public class Engineer extends PlayerCharacter {
      */
     public Engineer(@NotNull String name,
                     @NotNull BlockingQueue<ICharacter> turnsQueue,
-                    int health, int defense,
+                    int health, int strength, int defense,
                     IWeapon equippedWeapon) {
-        super(name, turnsQueue, health, defense, equippedWeapon);
+        super(name, turnsQueue, health, strength, defense, equippedWeapon);
     }
 
     /**
@@ -46,22 +48,22 @@ public class Engineer extends PlayerCharacter {
      *     the queue with the characters waiting for their turn
      * @param health
      *     the character's health points
+     * @param strength
+     *     the character's strength
      * @param defense
      *     the character's defense
      */
     public Engineer(@NotNull String name,
                     @NotNull BlockingQueue<ICharacter> turnsQueue,
-                    int health, int defense) {
-        super(name, turnsQueue, health, defense, null);
+                    int health, int strength, int defense) {
+        super(name, turnsQueue, health, strength, defense, null);
     }
 
     @Override
-    public boolean equip(IWeapon weapon) {
+    public void equip(IWeapon weapon) {
         if (weapon.canEngineerEquip()) {
             this.equippedWeapon = weapon;
-            return true;
         }
-        return false;
     }
 
     @Override

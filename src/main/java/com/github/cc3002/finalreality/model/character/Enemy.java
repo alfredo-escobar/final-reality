@@ -17,7 +17,6 @@ import org.jetbrains.annotations.NotNull;
  */
 public class Enemy extends AbstractCharacter {
 
-  private int strength;
   private final int weight;
 
   /**
@@ -38,18 +37,10 @@ public class Enemy extends AbstractCharacter {
    */
   public Enemy(@NotNull final String name,
                @NotNull final BlockingQueue<ICharacter> turnsQueue,
-               int health, int defense,
-               int strength, final int weight) {
-    super(name, turnsQueue, health, defense);
-    this.strength = strength;
+               int health, int strength, int defense,
+               final int weight) {
+    super(name, turnsQueue, health, strength, defense);
     this.weight = weight;
-  }
-
-  /**
-   * Returns the strength of this enemy.
-   */
-  public int getStrength() {
-    return strength;
   }
 
   /**
@@ -67,9 +58,6 @@ public class Enemy extends AbstractCharacter {
   public void attack(IPlayerCharacter opponent) {
     if (((ICharacter)opponent).getHealth() > 0) {
       ((ICharacter)opponent).getAttacked(this.getStrength());
-      if (((ICharacter)opponent).getHealth() == 0) {
-        event.firePropertyChange("Player character defeated", null, opponent);
-      }
     }
   }
 
@@ -91,12 +79,11 @@ public class Enemy extends AbstractCharacter {
       return false;
     }
     final Enemy that = (Enemy) o;
-    return getStrength() == that.getStrength()
-            && getWeight() == that.getWeight();
+    return getWeight() == that.getWeight();
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(super.hashCode(), Enemy.class, getStrength(), getWeight());
+    return Objects.hash(super.hashCode(), Enemy.class, getWeight());
   }
 }

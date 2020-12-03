@@ -12,11 +12,9 @@ import com.github.cc3002.finalreality.model.weapon.IWeapon;
 public interface IPlayerCharacter {
 
     /**
-     * Tries to equip a weapon to the character.
-     * Returns true if the weapon was successfully equipped,
-     * returns false otherwise.
+     * Equips a weapon to the character.
      */
-    boolean equip(IWeapon weapon);
+    void equip(IWeapon weapon);
 
     /**
      * Return this character's equipped weapon.

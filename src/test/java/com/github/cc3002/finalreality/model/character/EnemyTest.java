@@ -44,7 +44,7 @@ class EnemyTest extends AbstractCharacterTest {
     checkConstruction(new Enemy(ENEMY_NAME, turns, 7, 8, 9, 10),
                       testEnemy,
                       new Enemy(ENEMY_NAME, turns, 8, 9, 10, 11),
-                      new Thief(ENEMY_NAME, turns, 10, 8));
+                      new Thief(ENEMY_NAME, turns, 10, 9, 8));
   }
 
   @Test
@@ -55,7 +55,7 @@ class EnemyTest extends AbstractCharacterTest {
     var differentStrengthEnemy = new Enemy(ENEMY_NAME, turns, 7, 16, 9, 10);
     var differentDefenseEnemy = new Enemy(ENEMY_NAME, turns, 7, 8, 18, 10);
     var differentWeightEnemy = new Enemy(ENEMY_NAME, turns, 7, 8, 9, 20);
-    var testKnight = new Knight("Jagen", turns, 5, 18);
+    var testKnight = new Knight("Jagen", turns, 5, 20, 18);
 
     assertEquals(expectedEnemy, expectedEnemy);
     assertNotEquals(testKnight, expectedEnemy);

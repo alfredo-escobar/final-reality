@@ -1,7 +1,5 @@
 package com.github.cc3002.finalreality.model.character;
 
-import com.github.cc3002.finalreality.controller.IEventHandler;
-
 /**
  * This represents a character from the game.
  * A character can be controlled by the player or by the CPU (an enemy).
@@ -28,6 +26,11 @@ public interface ICharacter {
   int getHealth();
 
   /**
+   * Returns this character's strength.
+   */
+  int getStrength();
+
+  /**
    * Returns this character's defense.
    */
   int getDefense();
@@ -38,11 +41,4 @@ public interface ICharacter {
    *     the damage points inflicted by the attacker.
    */
   void getAttacked(int damage);
-
-  /**
-   * Adds a handler to listen to this character's calls.
-   * @param handler
-   *     the handler that will listen to the calls.
-   */
-  void addListener(IEventHandler handler);
 }
