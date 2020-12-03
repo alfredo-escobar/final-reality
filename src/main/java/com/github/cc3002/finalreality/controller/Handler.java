@@ -6,9 +6,16 @@ import com.github.cc3002.finalreality.model.character.player.IPlayerCharacter;
 
 import java.beans.PropertyChangeEvent;
 
+/**
+ * A class that manages calls from the model package
+ */
 public class Handler implements IEventHandler {
     private final GameController controller;
 
+    /**
+     * Creates the handler and links it with the given
+     * game controller
+     */
     public Handler(GameController controller) {
         this.controller = controller;
     }

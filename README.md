@@ -38,6 +38,6 @@ Finally, for the weapons, we have the abstract class Weapon that defines shared 
 damage and weight. For each specific type of weapon, a public class that extends Weapon has been defined.
 The Staff weapons take advantage of this, as they can now have their own magicDamage attribute.
 
---
+---
 
 For this version of the project, a Thief can equip swords, knives and bows.
