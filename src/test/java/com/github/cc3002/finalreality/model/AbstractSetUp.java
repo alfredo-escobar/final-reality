@@ -31,7 +31,7 @@ public abstract class AbstractSetUp {
     protected static final String BOW_NAME = "Test Bow";
     protected static final String KNIFE_NAME = "Test Knife";
     protected static final int DAMAGE = 15;
-    protected static final int WEIGHT = 10;
+    protected static final int SPEED = 10;
     protected static final int MAGIC_DAMAGE = 12;
     protected static final int MAGIC_DAMAGE_2 = 15;
 
@@ -52,11 +52,11 @@ public abstract class AbstractSetUp {
     protected BlockingQueue<ICharacter> turns;
 
     protected void setUpPlayerCharacters() {
-        testBlackMage = new BlackMage(BLACK_MAGE_NAME, turns, 7, 9, 10);
-        testKnight = new Knight(KNIGHT_NAME, turns, 7,  9);
-        testWhiteMage = new WhiteMage(WHITE_MAGE_NAME, turns, 7,  9, 10);
-        testEngineer = new Engineer(ENGINEER_NAME, turns, 7, 9);
-        testThief = new Thief(THIEF_NAME, turns, 7, 9);
+        testBlackMage = new BlackMage(BLACK_MAGE_NAME, turns, 7, 8, 9, 10);
+        testKnight = new Knight(KNIGHT_NAME, turns, 7, 8, 9);
+        testWhiteMage = new WhiteMage(WHITE_MAGE_NAME, turns, 7, 8, 9, 10);
+        testEngineer = new Engineer(ENGINEER_NAME, turns, 7, 8, 9);
+        testThief = new Thief(THIEF_NAME, turns, 7, 8, 9);
     }
 
     protected void setUpEnemy() {
@@ -64,11 +64,11 @@ public abstract class AbstractSetUp {
     }
 
     protected void setUpWeapons() {
-        testAxe = new Axe(AXE_NAME, DAMAGE, WEIGHT);
-        testStaff = new Staff(STAFF_NAME, DAMAGE, WEIGHT, MAGIC_DAMAGE);
-        testSword = new Sword(SWORD_NAME, DAMAGE, WEIGHT);
-        testBow = new Bow(BOW_NAME, DAMAGE, WEIGHT);
-        testKnife = new Knife(KNIFE_NAME, DAMAGE, WEIGHT);
+        testAxe = new Axe(AXE_NAME, DAMAGE, SPEED);
+        testStaff = new Staff(STAFF_NAME, DAMAGE, SPEED, MAGIC_DAMAGE);
+        testSword = new Sword(SWORD_NAME, DAMAGE, SPEED);
+        testBow = new Bow(BOW_NAME, DAMAGE, SPEED);
+        testKnife = new Knife(KNIFE_NAME, DAMAGE, SPEED);
     }
 
     protected void setUpTurns() {

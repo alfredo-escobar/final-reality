@@ -57,46 +57,46 @@ class PlayerCharacterTest extends AbstractCharacterTest {
    */
   @Test
   void BlackMageConstructorTest() {
-    checkConstruction(new BlackMage(BLACK_MAGE_NAME, turns, 7, 9, 10),
+    checkConstruction(new BlackMage(BLACK_MAGE_NAME, turns, 7, 8, 9, 10),
                       testBlackMage,
-                      new BlackMage("Test", turns, 7, 9, 10),
-                      new Thief(BLACK_MAGE_NAME, turns, 7, 9));
+                      new BlackMage("Test", turns, 7, 8, 9, 10),
+                      new Thief(BLACK_MAGE_NAME, turns, 7, 8, 9));
     assertNotEquals(testBlackMage, testEnemy);
   }
 
   @Test
   void KnightConstructorTest() {
-    checkConstruction(new Knight(KNIGHT_NAME, turns, 7, 9),
+    checkConstruction(new Knight(KNIGHT_NAME, turns, 7, 8, 9),
                       testKnight,
-                      new Knight("Test", turns, 7, 9),
-                      new Thief(KNIGHT_NAME, turns, 7, 9));
+                      new Knight("Test", turns, 7, 8, 9),
+                      new Thief(KNIGHT_NAME, turns, 7, 8, 9));
     assertNotEquals(testKnight, testEnemy);
   }
 
   @Test
   void WhiteMageConstructorTest() {
-    checkConstruction(new WhiteMage(WHITE_MAGE_NAME, turns, 7, 9, 10),
+    checkConstruction(new WhiteMage(WHITE_MAGE_NAME, turns, 7, 8, 9, 10),
                       testWhiteMage,
-                      new WhiteMage("Test", turns, 7, 9, 10),
-                      new Thief(WHITE_MAGE_NAME, turns, 7, 9));
+                      new WhiteMage("Test", turns, 7, 8, 9, 10),
+                      new Thief(WHITE_MAGE_NAME, turns, 7, 8, 9));
     assertNotEquals(testWhiteMage, testEnemy);
   }
 
   @Test
   void EngineerConstructorTest() {
-    checkConstruction(new Engineer(ENGINEER_NAME, turns, 7, 9),
+    checkConstruction(new Engineer(ENGINEER_NAME, turns, 7, 8, 9),
                       testEngineer,
-                      new Engineer("Test", turns, 7, 9),
-                      new Thief(ENGINEER_NAME, turns, 7, 9));
+                      new Engineer("Test", turns, 7, 8, 9),
+                      new Thief(ENGINEER_NAME, turns, 7, 8, 9));
     assertNotEquals(testEngineer, testEnemy);
   }
 
   @Test
   void ThiefConstructorTest() {
-    checkConstruction(new Thief(THIEF_NAME, turns, 7, 9),
+    checkConstruction(new Thief(THIEF_NAME, turns, 7, 8, 9),
                       testThief,
-                      new Thief("Test", turns, 7, 9),
-                      new BlackMage(THIEF_NAME, turns, 7, 9, 10));
+                      new Thief("Test", turns, 7, 8, 9),
+                      new BlackMage(THIEF_NAME, turns, 7, 8, 9, 10));
     assertNotEquals(testThief, testEnemy);
   }
 
@@ -178,24 +178,26 @@ class PlayerCharacterTest extends AbstractCharacterTest {
   @Test
   void manaTest() {
     int testMana = 12;
-    BlackMage testBlackMage2 = new BlackMage(BLACK_MAGE_NAME, turns, 7, 9, testMana);
+    BlackMage testBlackMage2 = new BlackMage(BLACK_MAGE_NAME, turns, 7, 8, 9, testMana);
     assertEquals(testMana, testBlackMage2.getMana());
-    WhiteMage testWhiteMage2 = new WhiteMage(BLACK_MAGE_NAME, turns, 7, 9, testMana);
+    WhiteMage testWhiteMage2 = new WhiteMage(BLACK_MAGE_NAME, turns, 7, 8, 9, testMana);
     assertEquals(testMana, testWhiteMage2.getMana());
   }
 
   @Test
   void MageEqualBranching() {
-    var differentNameMage = new WhiteMage("Merric", turns, 7, 9, 10);
-    var differentHealthMage = new WhiteMage(WHITE_MAGE_NAME, turns, 10, 9, 10);
-    var differentDefenseMage = new WhiteMage(WHITE_MAGE_NAME, turns, 7, 12, 10);
-    var differentManaMage = new WhiteMage(WHITE_MAGE_NAME, turns, 7, 9, 13);
+    var differentNameMage = new WhiteMage("Merric", turns, 7, 8, 9, 10);
+    var differentHealthMage = new WhiteMage(WHITE_MAGE_NAME, turns, 10, 8, 9, 10);
+    var differentStrengthMage = new WhiteMage(WHITE_MAGE_NAME, turns, 7, 11, 9, 10);
+    var differentDefenseMage = new WhiteMage(WHITE_MAGE_NAME, turns, 7, 8, 12, 10);
+    var differentManaMage = new WhiteMage(WHITE_MAGE_NAME, turns, 7, 8, 9, 13);
 
     assertEquals(testWhiteMage, testWhiteMage);
     assertNotEquals(testAxe, testWhiteMage);
     assertNotEquals(testBlackMage, testWhiteMage);
     assertNotEquals(differentNameMage, testWhiteMage);
     assertNotEquals(differentHealthMage, testWhiteMage);
+    assertNotEquals(differentStrengthMage, testWhiteMage);
     assertNotEquals(differentDefenseMage, testWhiteMage);
     assertNotEquals(differentManaMage, testWhiteMage);
   }
