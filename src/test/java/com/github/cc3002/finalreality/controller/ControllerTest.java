@@ -102,11 +102,11 @@ class ControllerTest {
         assertEquals(10, controller.getEnemyHealth(0));
         controller.equipToCharacter(1, 0);
         controller.attackAnEnemy(0, 0);
-        // Enemy 0 gets defeated, enemy 1 takes their place.
-        assertEquals(15, controller.getEnemyHealth(0));
-        controller.attackAnEnemy(0, 0);
-        assertEquals(5, controller.getEnemyHealth(0));
-        controller.attackAnEnemy(0, 0);
+        // Enemy 0 gets defeated.
+        assertEquals(15, controller.getEnemyHealth(1));
+        controller.attackAnEnemy(0, 1);
+        assertEquals(5, controller.getEnemyHealth(1));
+        controller.attackAnEnemy(0, 1);
         assert controller.isBattleWon();
     }
 
@@ -116,12 +116,12 @@ class ControllerTest {
         controller.attackAPlayableCharacter(0, 0);
         assertEquals(7, controller.getPlayerCharacterHealth(0));
         controller.attackAPlayableCharacter(1, 0);
-        // Player character 0 gets defeated, character 1 takes their place.
-        assertEquals(7, controller.getPlayerCharacterHealth(2));
-        // Enemy 1 proceeds to kill everyone
-        controller.attackAPlayableCharacter(1, 0);
-        controller.attackAPlayableCharacter(1, 0);
-        controller.attackAPlayableCharacter(1, 0);
+        // Player character 0 gets defeated.
+        assertEquals(7, controller.getPlayerCharacterHealth(3));
+        // Enemy 1 proceeds to defeat everyone.
+        controller.attackAPlayableCharacter(1, 1);
+        controller.attackAPlayableCharacter(1, 2);
+        controller.attackAPlayableCharacter(1, 3);
         assert controller.isBattleLost();
     }
 

@@ -1,17 +1,14 @@
 package com.github.cc3002.finalreality.controller;
 
-import com.github.cc3002.finalreality.controller.states.PartyReady;
-import com.github.cc3002.finalreality.controller.states.PreparingParty;
-import com.github.cc3002.finalreality.controller.states.State;
 import com.github.cc3002.finalreality.model.character.AbstractCharacter;
 import com.github.cc3002.finalreality.model.character.Enemy;
 import com.github.cc3002.finalreality.model.character.ICharacter;
 import com.github.cc3002.finalreality.model.character.player.*;
 import com.github.cc3002.finalreality.model.weapon.*;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * A class that manages the objects from the model package
@@ -23,17 +20,18 @@ public class GameController {
     private final ArrayList<Enemy> enemies = new ArrayList<>();
     private final ArrayList<IWeapon> inventory = new ArrayList<>();
     private final IEventHandler handler = new Handler(this);
+    private Integer activePlayerCharacters = 4;
+    private Integer activeEnemies = 0;
     private State state;
 
     protected BlockingQueue<ICharacter> turns;
-    // private ICharacter currentCharacter = null;
 
     /**
      * Creates a new controller and sets its initial
      * state as "preparing party".
      */
     public GameController() {
-        this.setState(new PreparingParty());
+        this.setState(new State_PreparingParty());
     }
 
     /**
@@ -56,8 +54,7 @@ public class GameController {
 
     /**
      * Returns true if 4 player characters have
-     * been created, and neither the player or
-     * the enemies have won.
+     * been created, and the battle hasn't started yet.
      */
     public boolean isPartyReady() {
         return state.isPartyReady();
@@ -80,20 +77,50 @@ public class GameController {
     }
 
     /**
+     * Returns true if the current state is "Player Turn"
+     */
+    public boolean isPlayerTurn() {
+        return state.isPlayerTurn();
+    }
+
+    /**
+     * Returns true if the current state is "Enemy Turn"
+     */
+    public boolean isEnemyTurn() {
+        return state.isEnemyTurn();
+    }
+
+    /**
+     * Returns true if the current state is "Removing Character From Queue"
+     */
+    public boolean isRemovingCharacterFromQueue() {
+        return state.isRemovingCharacterFromQueue();
+    }
+
+    /**
+     * Returns true if the current state is "Selecting First In Queue"
+     */
+    public boolean isSelectingFirstInQueue() {
+        return state.isSelectingFirstInQueue();
+    }
+
+    void addPlayerCharacter(IPlayerCharacter playerCharacter) {
+        party.add(playerCharacter);
+        ((ICharacter)(party.get(party.size() - 1))).addListener(handler);
+        ((ICharacter)(party.get(party.size() - 1))).waitTurn();
+        if (party.size() == 4) {
+            state.ready();
+        }
+    }
+
+    /**
      * Adds a knight with the given parameters
      * to the party.
      */
     public void addKnight(final String name,
                           int health, int defense,
                           IWeapon weapon) {
-        if (state.isPreparingParty()) {
-            party.add(new Knight(name, turns, health, defense, weapon));
-            ((ICharacter)(party.get(party.size() - 1))).addListener(handler);
-            ((ICharacter)(party.get(party.size() - 1))).waitTurn();
-            if (party.size() == 4) {
-                state.ready();
-            }
-        }
+        state.addPlayerCharacter(new Knight(name, turns, health, defense, weapon));
     }
 
     /**
@@ -103,14 +130,7 @@ public class GameController {
     public void addEngineer(final String name,
                             int health, int defense,
                             IWeapon weapon) {
-        if (state.isPreparingParty()) {
-            party.add(new Engineer(name, turns, health, defense, weapon));
-            ((ICharacter)(party.get(party.size() - 1))).addListener(handler);
-            ((ICharacter)(party.get(party.size() - 1))).waitTurn();
-            if (party.size() == 4) {
-                state.ready();
-            }
-        }
+        state.addPlayerCharacter(new Engineer(name, turns, health, defense, weapon));
     }
 
     /**
@@ -120,14 +140,7 @@ public class GameController {
     public void addThief(final String name,
                          int health, int defense,
                          IWeapon weapon) {
-        if (state.isPreparingParty()) {
-            party.add(new Thief(name, turns, health, defense, weapon));
-            ((ICharacter)(party.get(party.size() - 1))).addListener(handler);
-            ((ICharacter)(party.get(party.size() - 1))).waitTurn();
-            if (party.size() == 4) {
-                state.ready();
-            }
-        }
+        state.addPlayerCharacter(new Thief(name, turns, health, defense, weapon));
     }
 
     /**
@@ -138,14 +151,7 @@ public class GameController {
                              int health, int defense,
                              IWeapon weapon,
                              int mana) {
-        if (state.isPreparingParty()) {
-            party.add(new BlackMage(name, turns, health, defense, weapon, mana));
-            ((ICharacter)(party.get(party.size() - 1))).addListener(handler);
-            ((ICharacter)(party.get(party.size() - 1))).waitTurn();
-            if (party.size() == 4) {
-                state.ready();
-            }
-        }
+        state.addPlayerCharacter(new BlackMage(name, turns, health, defense, weapon, mana));
     }
 
     /**
@@ -156,14 +162,7 @@ public class GameController {
                              int health, int defense,
                              IWeapon weapon,
                              int mana) {
-        if (state.isPreparingParty()) {
-            party.add(new WhiteMage(name, turns, health, defense, weapon, mana));
-            ((ICharacter)(party.get(party.size() - 1))).addListener(handler);
-            ((ICharacter)(party.get(party.size() - 1))).waitTurn();
-            if (party.size() == 4) {
-                state.ready();
-            }
-        }
+        state.addPlayerCharacter(new WhiteMage(name, turns, health, defense, weapon, mana));
     }
 
     /**
@@ -177,6 +176,7 @@ public class GameController {
             enemies.add(new Enemy(name, turns, health, defense, strength, weight));
             enemies.get(enemies.size() - 1).addListener(handler);
             enemies.get(enemies.size() - 1).waitTurn();
+            activeEnemies += 1;
         }
     }
 
@@ -362,13 +362,17 @@ public class GameController {
     }
 
     /**
-     * Equips a weapon to a player character
+     * Equips a weapon to the first player character
+     * in the turns queue
      * @param weaponIndex
      *      the position in the inventory of the weapon
-     * @param partyIndex
-     *      the position in the party of the player character
      */
-    public void equipToCharacter(int weaponIndex, int partyIndex) {
+    public void activePlayerCharEquips(int weaponIndex) {
+        int partyIndex = party.indexOf(turns.element());
+        state.equipToCharacter(partyIndex, weaponIndex);
+    }
+
+    void equipToCharacter(int partyIndex, int weaponIndex) {
         var bufferWeapon = party.get(partyIndex).getEquippedWeapon();
         // If the weapon was successfully equipped:
         if (party.get(partyIndex).equip(inventory.get(weaponIndex))) {
@@ -380,42 +384,56 @@ public class GameController {
     }
 
     /**
-     * Makes a player character attack an enemy
-     * @param partyIndex
-     *      the position in the party of the player character
+     * Makes the first player character in the
+     * turns queue attack an enemy.
      * @param enemyIndex
      *      the position in the enemy group of the enemy
      */
-    public void attackAnEnemy(int partyIndex, int enemyIndex) {
+    public void activePlayerCharAttacksEnemy(int enemyIndex) {
+        int partyIndex = party.indexOf(turns.element());
+        state.attackAnEnemy(partyIndex, enemyIndex);
+    }
+
+    void attackAnEnemy(int partyIndex, int enemyIndex) {
         party.get(partyIndex).attack(enemies.get(enemyIndex));
+        state.removeFromQueue();
+        endTurn();
     }
 
     /**
-     * Makes an enemy attack player character
-     * @param enemyIndex
-     *      the position in the enemy group of the enemy
-     * @param partyIndex
-     *      the position in the party of the player character
+     * Makes the first enemy in the turns
+     * queue attack a player character.
      */
-    public void attackAPlayableCharacter(int enemyIndex, int partyIndex) {
+    public void activeEnemyAttacksPlayerChar() {
+        int enemyIndex = enemies.indexOf(turns.element());
+        int partyIndex = ThreadLocalRandom.current().nextInt(0, party.size());
+        state.attackAPlayerCharacter(enemyIndex, partyIndex);
+    }
+
+    void attackAPlayableCharacter(int enemyIndex, int partyIndex) {
         enemies.get(enemyIndex).attack(party.get(partyIndex));
+        state.removeFromQueue();
+        endTurn();
     }
 
     /**
-     * Takes the first character in the turns queue and
-     * makes it do an action
+     * Starts the action of the first character in the turns queue
+     * if current state is "Selecting First in Queue".
      */
-    public void startTurn() {
-        if (state.isPartyReady()) {
-            var character = turns.poll();
-            if (party.contains(character)) {
-                // User action
-                // this.currentCharacter = character;
-            } else if (enemies.contains(character)) {
-                // CPU action
-                // this.currentCharacter = character;
-            }
-            endTurn(character);
+    public void characterInQueue() {
+        state.characterInQueue();
+    }
+
+    void startFirstInQueueTurn() {
+        var character = turns.element();
+        if (party.contains(character)) {
+            state.startPlayerTurn();
+        } else if (enemies.contains(character)) {
+            state.startEnemyTurn();
+            activeEnemyAttacksPlayerChar();
+        } else {
+            turns.poll();
+            startFirstInQueueTurn();
         }
     }
 
@@ -423,19 +441,28 @@ public class GameController {
      * Takes a character in an active turn and
      * makes it wait on the turns queue. If there is
      * another character on the queue, calls startTurn()
-     * @param character
-     *      the character whose turn is to be ended
      */
-    public void endTurn(ICharacter character) {
-        if (turns.size() > 0) {
-            startTurn();
-        }
-        character.waitTurn();
+    public void removeFirstFromQueue() {
+        state.endTurn();
     }
 
-//    public ICharacter getCurrentCharacter() {
-//        return this.currentCharacter;
-//    }
+    void endTurn() {
+        var character = turns.poll();
+        character.waitTurn();
+        startTurn();
+    }
+
+    /**
+     * Changes the state to "Selecting First In Queue".
+     * If the turns queue is not empty, starts the turn
+     * of the first character in the queue.
+     */
+    public void startTurn() {
+        state.selectFirst();
+        if (turns.size() > 0) {
+            characterInQueue();
+        }
+    }
 
     /**
      * Removes a defeated player character from the party.

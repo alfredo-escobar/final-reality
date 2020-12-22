@@ -41,9 +41,7 @@ public abstract class AbstractCharacter implements ICharacter {
    */
   protected void addToQueue() {
     turnsQueue.add(this);
-    if (turnsQueue.size() == 1) {
-      event.firePropertyChange("Start of turn", null, this);
-    }
+    event.firePropertyChange("Start of turn", null, this);
     scheduledExecutor.shutdown();
   }
 

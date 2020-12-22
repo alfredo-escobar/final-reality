@@ -22,15 +22,26 @@ public class Handler implements IEventHandler {
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        if (evt.getPropertyName().equals("Start of turn")) {
-            controller.startTurn();
-        }
-        else if (evt.getPropertyName().equals("Player character defeated")) {
-            controller.onPlayerCharacterDefeat((IPlayerCharacter) evt.getNewValue());
-        }
-        else if (evt.getPropertyName().equals("Enemy defeated")) {
-            controller.onEnemyDefeat((Enemy) evt.getNewValue());
+        switch(evt.getPropertyName()) {
+            case "Start of turn":
+                controller.characterInQueue();
+                break;
+            case "Player character defeated":
+                controller.onPlayerCharacterDefeat((IPlayerCharacter) evt.getNewValue());
+                break;
+            case "Enemy defeated":
+                controller.onEnemyDefeat((Enemy) evt.getNewValue());
+                break;
         }
 
+//        if (evt.getPropertyName().equals("Start of turn")) {
+//            controller.characterInQueue();
+//        }
+//        else if (evt.getPropertyName().equals("Player character defeated")) {
+//            controller.onPlayerCharacterDefeat((IPlayerCharacter) evt.getNewValue());
+//        }
+//        else if (evt.getPropertyName().equals("Enemy defeated")) {
+//            controller.onEnemyDefeat((Enemy) evt.getNewValue());
+//        }
     }
 }
