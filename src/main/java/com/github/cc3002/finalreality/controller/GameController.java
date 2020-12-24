@@ -112,55 +112,137 @@ public class GameController {
     }
 
     /**
-     * Adds a knight with the given parameters
-     * to the party.
+     * Adds a knight with a sword with the
+     * given parameters to the party.
      */
-    public void addKnight(final String name,
-                          int health, int defense,
-                          IWeapon weapon) {
-        state.addPlayerCharacter(new Knight(name, turns, health, defense, weapon));
+    public void addKnightWithSword(final String characterName,
+                                   int health, int defense,
+                                   final String weaponName,
+                                   final int damage, final int weight) {
+        var weapon = new Sword(weaponName, damage, weight);
+        state.addPlayerCharacter(new Knight(characterName, turns, health, defense, weapon));
     }
 
     /**
-     * Adds an engineer with the given parameters
-     * to the party.
+     * Adds a knight with an axe with the
+     * given parameters to the party.
      */
-    public void addEngineer(final String name,
-                            int health, int defense,
-                            IWeapon weapon) {
-        state.addPlayerCharacter(new Engineer(name, turns, health, defense, weapon));
+    public void addKnightWithAxe(final String characterName,
+                                   int health, int defense,
+                                   final String weaponName,
+                                   final int damage, final int weight) {
+        var weapon = new Axe(weaponName, damage, weight);
+        state.addPlayerCharacter(new Knight(characterName, turns, health, defense, weapon));
     }
 
     /**
-     * Adds a thief with the given parameters
-     * to the party.
+     * Adds a knight with a knife with the
+     * given parameters to the party.
      */
-    public void addThief(final String name,
-                         int health, int defense,
-                         IWeapon weapon) {
-        state.addPlayerCharacter(new Thief(name, turns, health, defense, weapon));
+    public void addKnightWithKnife(final String characterName,
+                                 int health, int defense,
+                                 final String weaponName,
+                                 final int damage, final int weight) {
+        var weapon = new Knife(weaponName, damage, weight);
+        state.addPlayerCharacter(new Knight(characterName, turns, health, defense, weapon));
     }
 
     /**
-     * Adds a black mage with the given parameters
-     * to the party.
+     * Adds an engineer with an axe with the
+     * given parameters to the party.
      */
-    public void addBlackMage(final String name,
-                             int health, int defense,
-                             IWeapon weapon,
-                             int mana) {
-        state.addPlayerCharacter(new BlackMage(name, turns, health, defense, weapon, mana));
+    public void addEngineerWithAxe(final String characterName,
+                                 int health, int defense,
+                                 final String weaponName,
+                                 final int damage, final int weight) {
+        var weapon = new Axe(weaponName, damage, weight);
+        state.addPlayerCharacter(new Engineer(characterName, turns, health, defense, weapon));
     }
 
     /**
-     * Adds a white mage with the given parameters
-     * to the party.
+     * Adds an engineer with a bow with the
+     * given parameters to the party.
      */
-    public void addWhiteMage(final String name,
-                             int health, int defense,
-                             IWeapon weapon,
-                             int mana) {
-        state.addPlayerCharacter(new WhiteMage(name, turns, health, defense, weapon, mana));
+    public void addEngineerWithBow(final String characterName,
+                                   int health, int defense,
+                                   final String weaponName,
+                                   final int damage, final int weight) {
+        var weapon = new Bow(weaponName, damage, weight);
+        state.addPlayerCharacter(new Engineer(characterName, turns, health, defense, weapon));
+    }
+
+    /**
+     * Adds a thief with a sword with the
+     * given parameters to the party.
+     */
+    public void addThiefWithSword(final String characterName,
+                                   int health, int defense,
+                                   final String weaponName,
+                                   final int damage, final int weight) {
+        var weapon = new Sword(weaponName, damage, weight);
+        state.addPlayerCharacter(new Thief(characterName, turns, health, defense, weapon));
+    }
+
+    /**
+     * Adds a thief with a knife with the
+     * given parameters to the party.
+     */
+    public void addThiefWithKnife(final String characterName,
+                                  int health, int defense,
+                                  final String weaponName,
+                                  final int damage, final int weight) {
+        var weapon = new Knife(weaponName, damage, weight);
+        state.addPlayerCharacter(new Thief(characterName, turns, health, defense, weapon));
+    }
+
+    /**
+     * Adds a thief with a bow with the
+     * given parameters to the party.
+     */
+    public void addThiefWithBow(final String characterName,
+                                  int health, int defense,
+                                  final String weaponName,
+                                  final int damage, final int weight) {
+        var weapon = new Bow(weaponName, damage, weight);
+        state.addPlayerCharacter(new Thief(characterName, turns, health, defense, weapon));
+    }
+
+    /**
+     * Adds a black mage with a knife with the
+     * given parameters to the party.
+     */
+    public void addBlackMageWithKnife(final String characterName,
+                                  int health, int defense, int mana,
+                                  final String weaponName,
+                                  final int damage, final int weight) {
+        var weapon = new Knife(weaponName, damage, weight);
+        state.addPlayerCharacter(new BlackMage(characterName, turns, health, defense, weapon, mana));
+    }
+
+    /**
+     * Adds a black mage with a staff with the
+     * given parameters to the party.
+     */
+    public void addBlackMageWithStaff(final String characterName,
+                                int health, int defense, int mana,
+                                final String weaponName,
+                                final int damage, final int weight,
+                                final int magicDamage) {
+        var weapon = new Staff(weaponName, damage, weight, magicDamage);
+        state.addPlayerCharacter(new BlackMage(characterName, turns, health, defense, weapon, mana));
+    }
+
+    /**
+     * Adds a white mage with a staff with the
+     * given parameters to the party.
+     */
+    public void addWhiteMageWithStaff(final String characterName,
+                                      int health, int defense, int mana,
+                                      final String weaponName,
+                                      final int damage, final int weight,
+                                      final int magicDamage) {
+        var weapon = new Staff(weaponName, damage, weight, magicDamage);
+        state.addPlayerCharacter(new WhiteMage(characterName, turns, health, defense, weapon, mana));
     }
 
     /**

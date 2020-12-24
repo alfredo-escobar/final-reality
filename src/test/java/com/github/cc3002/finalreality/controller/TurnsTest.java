@@ -20,14 +20,14 @@ class TurnsTest {
 
         assertTrue(controller.isPreparingParty());
 
-        controller.addKnight("Draug", 8, 6,
-                new Sword("Steel sword", 12, 12));
-        controller.addEngineer("Beck", 7, 4,
-                new Axe("Steel axe", 12, 15));
-        controller.addThief("Julian", 7, 4,
-                new Knife("Steel knife", 12, 21));
-        controller.addBlackMage("Merric", 7, 2,
-                new Staff("ArcFire", 12, 24, 12),10);
+        controller.addKnightWithKnife("Draug", 8, 6,
+                "Steel knife", 12, 12);
+        controller.addEngineerWithBow("Beck", 7, 4,
+                "Steel bow", 12, 15);
+        controller.addThiefWithBow("Julian", 7, 4,
+                "Steel bow", 12, 21);
+        controller.addBlackMageWithKnife("Merric", 7, 2, 10,
+                "Steel knife", 12, 24);
 
         assertTrue(controller.isPartyReady());
 
@@ -63,19 +63,19 @@ class TurnsTest {
 
         assertTrue(controller.isPreparingParty());
 
-        controller.addKnight("Draug", 8, 6,
-                new Sword("Iron sword", 2, 10));
-        controller.addEngineer("Beck", 7, 4,
-                new Axe("Iron axe", 2, 11));
-        controller.addThief("Julian", 7, 4,
-                new Knife("Iron knife", 2, 20));
-        controller.addBlackMage("Merric", 7, 2,
-                new Staff("Fire", 2, 21, 2),10);
+        controller.addKnightWithAxe("Draug", 8, 6,
+                "Iron axe", 2, 5);
+        controller.addEngineerWithBow("Beck", 7, 4,
+                "Iron bow", 2, 6);
+        controller.addThiefWithSword("Julian", 7, 4,
+                "Iron sword", 2, 15);
+        controller.addBlackMageWithStaff("Merric", 7, 2, 10,
+                "Fire", 2, 16, 2);
 
         assertTrue(controller.isPartyReady());
 
-        controller.addEnemy("Gharnef", 100, 4, 25, 15);
-        controller.addEnemy("Medeus", 150, 6, 30, 16);
+        controller.addEnemy("Gharnef", 100, 4, 25, 10);
+        controller.addEnemy("Medeus", 150, 6, 30, 11);
 
         controller.addSword("Bronze sword", 1, 15);
         controller.addAxe("Bronze axe", 1, 15);

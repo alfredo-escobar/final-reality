@@ -28,29 +28,17 @@ class ControllerTest {
         assertFalse(controller.isRemovingCharacterFromQueue());
         assertFalse(controller.isSelectingFirstInQueue());
 
-        controller.addKnight("Draug", 8, 6,
-                new Sword("Iron sword", 2, 2));
-        controller.addWhiteMage("Wrys", 7, 2,
-                new Staff("Fire", 2, 20, 2),10);
-        controller.addEngineer("Beck", 7, 4,
-                new Axe("Iron axe", 2, 22));
-        controller.addThief("Julian", 7, 4,
-                new Knife("Iron knife", 2, 24));
-
-        // The following player characters won't get added to the party
+        controller.addKnightWithSword("Draug",8, 6,
+                "Iron sword", 2, 2);
+        controller.addWhiteMageWithStaff("Wrys", 7, 2, 10,
+                "Fire", 2, 20, 2);
+        controller.addEngineerWithAxe("Beck", 7, 4,
+                "Iron axe", 2, 22);
+        controller.addThiefWithKnife("Julian", 7, 4,
+                "Iron knife", 2, 24);
+        
         assertTrue(controller.isPartyReady());
         assertFalse(controller.isPreparingParty());
-
-        controller.addBlackMage("Merric", 7, 2,
-                new Staff("Fire", 2, 2, 2), 10);
-        controller.addKnight("Roger", 8, 6,
-                new Sword("Iron sword", 2, 2));
-        controller.addWhiteMage("Lena", 7, 2,
-                new Staff("Fire", 2, 2, 2), 10);
-        controller.addEngineer("Jake", 7, 4,
-                new Axe("Iron axe", 2, 2));
-        controller.addThief("Rickard", 7, 4,
-                new Knife("Iron knife", 2, 2));
 
         for (int i=0; i<10; i++) {
             // The first six bandits get added.

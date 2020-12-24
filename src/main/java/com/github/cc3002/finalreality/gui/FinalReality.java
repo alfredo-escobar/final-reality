@@ -1,9 +1,6 @@
 package com.github.cc3002.finalreality.gui;
 
 import com.github.cc3002.finalreality.controller.GameController;
-import com.github.cc3002.finalreality.gui.nodes.MovableNodeBuilder;
-import com.github.cc3002.finalreality.model.character.ICharacter;
-import com.github.cc3002.finalreality.model.weapon.*;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.scene.Group;
@@ -35,17 +32,11 @@ import java.util.Arrays;
  */
 public class FinalReality extends Application {
 
-  protected IWeapon defaultAxe = new Axe("Iron axe", 2, 2);
-  protected IWeapon defaultStaff = new Staff("Wind staff", 2, 2, 2);
-  protected IWeapon defaultSword = new Sword("Iron sword", 2, 2);
-  protected IWeapon defaultBow = new Bow("Iron bow", 2, 2);
-  protected IWeapon defaultKnife = new Knife("Iron knife", 2, 2);
-
-  ArrayList<String> knightNames = new ArrayList<String>(Arrays.asList("Draug", "Dolph", "Macellan", "Roger", "?"));
-  ArrayList<String> engineerNames = new ArrayList<String>(Arrays.asList("Jake", "Beck", "Grigas", "Toras", "?"));
-  ArrayList<String> thiefNames = new ArrayList<String>(Arrays.asList("Julian", "Rickard", "Dahl", "Barm", "?"));
-  ArrayList<String> bMageNames = new ArrayList<String>(Arrays.asList("Merric", "Linde", "Arlen", "Jubelo", "?"));
-  ArrayList<String> wMageNames = new ArrayList<String>(Arrays.asList("Lena", "Maria", "Elice", "Wrys", "?"));
+  ArrayList<String> knightNames = new ArrayList<>(Arrays.asList("Draug", "Dolph", "Macellan", "Roger", "?"));
+  ArrayList<String> engineerNames = new ArrayList<>(Arrays.asList("Jake", "Beck", "Grigas", "Toras", "?"));
+  ArrayList<String> thiefNames = new ArrayList<>(Arrays.asList("Julian", "Rickard", "Dahl", "Barm", "?"));
+  ArrayList<String> bMageNames = new ArrayList<>(Arrays.asList("Merric", "Linde", "Arlen", "Jubelo", "?"));
+  ArrayList<String> wMageNames = new ArrayList<>(Arrays.asList("Lena", "Maria", "Elice", "Wrys", "?"));
 
   private static final String RESOURCE_PATH = "src/main/resources/";
   GameController controller = new GameController();
@@ -94,8 +85,9 @@ public class FinalReality extends Application {
     knightButton.setLayoutX(250);
     knightButton.setLayoutY(250);
     knightButton.setOnAction((event -> {
-      controller.addKnight(knightNames.get(controller.getAmountOfPlayerCharacters()),
-              8, 6, defaultSword);
+      controller.addKnightWithSword(knightNames.get(controller.getAmountOfPlayerCharacters()),
+              8, 6,
+              "Iron sword", 2, 2);
       PC_Text.setText("Player Characters: " + controller.getAmountOfPlayerCharacters());
     }));
     setupScr.getChildren().add(knightButton);
@@ -104,8 +96,9 @@ public class FinalReality extends Application {
     engButton.setLayoutX(330);
     engButton.setLayoutY(250);
     engButton.setOnAction((event -> {
-      controller.addEngineer(engineerNames.get(controller.getAmountOfPlayerCharacters()),
-              7, 4, defaultAxe);
+      controller.addEngineerWithAxe(engineerNames.get(controller.getAmountOfPlayerCharacters()),
+              7, 4,
+              "Iron axe", 2, 2);
       PC_Text.setText("Player Characters: " + controller.getAmountOfPlayerCharacters());
     }));
     setupScr.getChildren().add(engButton);
@@ -114,8 +107,9 @@ public class FinalReality extends Application {
     thiefButton.setLayoutX(420);
     thiefButton.setLayoutY(250);
     thiefButton.setOnAction((event -> {
-      controller.addThief(thiefNames.get(controller.getAmountOfPlayerCharacters()),
-              7, 4, defaultKnife);
+      controller.addThiefWithKnife(thiefNames.get(controller.getAmountOfPlayerCharacters()),
+              7, 4,
+              "Iron knife", 2, 2);
       PC_Text.setText("Player Characters: " + controller.getAmountOfPlayerCharacters());
     }));
     setupScr.getChildren().add(thiefButton);
@@ -124,8 +118,9 @@ public class FinalReality extends Application {
     bMageButton.setLayoutX(490);
     bMageButton.setLayoutY(250);
     bMageButton.setOnAction((event -> {
-      controller.addBlackMage(bMageNames.get(controller.getAmountOfPlayerCharacters()),
-              7, 2, defaultStaff, 10);
+      controller.addBlackMageWithStaff(bMageNames.get(controller.getAmountOfPlayerCharacters()),
+              7, 2, 10,
+              "Wind staff", 2, 2, 2);
       PC_Text.setText("Player Characters: " + controller.getAmountOfPlayerCharacters());
     }));
     setupScr.getChildren().add(bMageButton);
@@ -134,8 +129,9 @@ public class FinalReality extends Application {
     wMageButton.setLayoutX(600);
     wMageButton.setLayoutY(250);
     wMageButton.setOnAction((event -> {
-      controller.addWhiteMage(wMageNames.get(controller.getAmountOfPlayerCharacters()),
-              7, 2, defaultStaff, 10);
+      controller.addWhiteMageWithStaff(wMageNames.get(controller.getAmountOfPlayerCharacters()),
+              7, 2, 10,
+              "Wind staff", 2, 2, 2);
       PC_Text.setText("Player Characters: " + controller.getAmountOfPlayerCharacters());
     }));
     setupScr.getChildren().add(wMageButton);
