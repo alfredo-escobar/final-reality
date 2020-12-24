@@ -80,6 +80,11 @@ public class Enemy extends AbstractCharacter {
   }
 
   @Override
+  public String getSprite() {
+    return "Enemy.png";
+  }
+
+  @Override
   public boolean equals(final Object o) {
     if (this == o) {
       return true;

@@ -45,4 +45,10 @@ public interface ICharacter {
    *     the handler that will listen to the calls.
    */
   void addListener(IEventHandler handler);
+
+  /**
+   * Returns the name of the image file to be used
+   * as a sprite for this character.
+   */
+  String getSprite();
 }

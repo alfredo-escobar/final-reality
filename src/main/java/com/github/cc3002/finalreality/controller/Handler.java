@@ -23,7 +23,7 @@ public class Handler implements IEventHandler {
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         switch(evt.getPropertyName()) {
-            case "Start of turn":
+            case "Added to queue":
                 controller.characterInQueue();
                 break;
             case "Player character defeated":

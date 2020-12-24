@@ -65,6 +65,11 @@ public class Thief extends PlayerCharacter {
     }
 
     @Override
+    public String getSprite() {
+        return "Thief.png";
+    }
+
+    @Override
     public int hashCode() {
         return Objects.hash(super.hashCode(), Thief.class);
     }

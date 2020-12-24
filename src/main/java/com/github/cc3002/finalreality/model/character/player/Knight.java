@@ -65,6 +65,11 @@ public class Knight extends PlayerCharacter {
     }
 
     @Override
+    public String getSprite() {
+        return "Knight.png";
+    }
+
+    @Override
     public int hashCode() {
         return Objects.hash(super.hashCode(), Knight.class);
     }

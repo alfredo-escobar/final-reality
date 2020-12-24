@@ -8,6 +8,7 @@ import com.github.cc3002.finalreality.model.weapon.*;
 
 import java.util.ArrayList;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -20,11 +21,9 @@ public class GameController {
     private final ArrayList<Enemy> enemies = new ArrayList<>();
     private final ArrayList<IWeapon> inventory = new ArrayList<>();
     private final IEventHandler handler = new Handler(this);
-    private Integer activePlayerCharacters = 4;
-    private Integer activeEnemies = 0;
     private State state;
 
-    protected BlockingQueue<ICharacter> turns;
+    protected BlockingQueue<ICharacter> turns = new LinkedBlockingQueue<>();
 
     /**
      * Creates a new controller and sets its initial
@@ -107,7 +106,6 @@ public class GameController {
     void addPlayerCharacter(IPlayerCharacter playerCharacter) {
         party.add(playerCharacter);
         ((ICharacter)(party.get(party.size() - 1))).addListener(handler);
-        ((ICharacter)(party.get(party.size() - 1))).waitTurn();
         if (party.size() == 4) {
             state.ready();
         }
@@ -175,8 +173,6 @@ public class GameController {
         if (enemies.size() < 6) {
             enemies.add(new Enemy(name, turns, health, defense, strength, weight));
             enemies.get(enemies.size() - 1).addListener(handler);
-            enemies.get(enemies.size() - 1).waitTurn();
-            activeEnemies += 1;
         }
     }
 
@@ -262,6 +258,16 @@ public class GameController {
     }
 
     /**
+     * Returns the name of the image file to be used
+     * as a sprite for this playable character.
+     * @param index
+     *      the position of the character
+     */
+    public String getPlayerCharacterSprite(int index) {
+        return ((ICharacter)party.get(index)).getSprite();
+    }
+
+    /**
      * Returns the mana of the player character
      * on a given position of the party.
      * @param index
@@ -322,6 +328,16 @@ public class GameController {
     }
 
     /**
+     * Returns the name of the image file to be used
+     * as a sprite for this enemy.
+     * @param index
+     *      the position of the enemy
+     */
+    public String getEnemySprite(int index) {
+        return enemies.get(index).getSprite();
+    }
+
+    /**
      * Returns the name of the weapon
      * on a given position of the inventory.
      * @param index
@@ -362,6 +378,44 @@ public class GameController {
     }
 
     /**
+     * Returns amount of player characters.
+     */
+    public int getAmountOfPlayerCharacters() {
+        return party.size();
+    }
+
+    /**
+     * Returns amount of enemies.
+     */
+    public int getAmountOfEnemies() {
+        return enemies.size();
+    }
+
+    /**
+     * Returns amount of weapons in inventory.
+     */
+    public int getAmountOfWeapons() {
+        return inventory.size();
+    }
+
+    /**
+     * Returns the active player character's name.
+     */
+    public String getActivePlayerCharName() {
+        return turns.element().getName();
+    }
+
+    /**
+     * Returns the active player character's weapon name.
+     */
+    public String getActivePlayerCharWeaponData() {
+        var weapon = ((IPlayerCharacter)turns.element()).getEquippedWeapon();
+        var name = weapon.getName();
+        var damage = weapon.getDamage();
+        return name + " (Damage: " + damage + ")";
+    }
+
+    /**
      * Equips a weapon to the first player character
      * in the turns queue
      * @param weaponIndex
@@ -377,9 +431,7 @@ public class GameController {
         // If the weapon was successfully equipped:
         if (party.get(partyIndex).equip(inventory.get(weaponIndex))) {
             inventory.remove(weaponIndex);
-            if (bufferWeapon != null) {
-                inventory.add(bufferWeapon);
-            }
+            inventory.add(bufferWeapon);
         }
     }
 
@@ -397,7 +449,7 @@ public class GameController {
     void attackAnEnemy(int partyIndex, int enemyIndex) {
         party.get(partyIndex).attack(enemies.get(enemyIndex));
         state.removeFromQueue();
-        endTurn();
+        removeFirstFromQueue();
     }
 
     /**
@@ -413,7 +465,7 @@ public class GameController {
     void attackAPlayableCharacter(int enemyIndex, int partyIndex) {
         enemies.get(enemyIndex).attack(party.get(partyIndex));
         state.removeFromQueue();
-        endTurn();
+        removeFirstFromQueue();
     }
 
     /**
@@ -431,7 +483,7 @@ public class GameController {
         } else if (enemies.contains(character)) {
             state.startEnemyTurn();
             activeEnemyAttacksPlayerChar();
-        } else {
+        } else if (turns.size() > 1) {
             turns.poll();
             startFirstInQueueTurn();
         }
@@ -453,11 +505,21 @@ public class GameController {
     }
 
     /**
-     * Changes the state to "Selecting First In Queue".
-     * If the turns queue is not empty, starts the turn
-     * of the first character in the queue.
+     * Starts the timer of every character, then
+     * waits for the first character to appear
+     * in the queue
      */
-    public void startTurn() {
+    public void startGame() {
+        for (IPlayerCharacter playerChar : party) {
+            ((ICharacter)(playerChar)).waitTurn();
+        }
+        for (Enemy enemy : enemies) {
+            enemy.waitTurn();
+        }
+        startTurn();
+    }
+
+    void startTurn() {
         state.selectFirst();
         if (turns.size() > 0) {
             characterInQueue();

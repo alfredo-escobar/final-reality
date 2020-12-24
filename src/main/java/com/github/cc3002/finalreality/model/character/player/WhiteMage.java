@@ -71,6 +71,11 @@ public class WhiteMage extends AbstractMage {
     }
 
     @Override
+    public String getSprite() {
+        return "WhiteMage.png";
+    }
+
+    @Override
     public int hashCode() {
         return Objects.hash(super.hashCode(), WhiteMage.class);
     }

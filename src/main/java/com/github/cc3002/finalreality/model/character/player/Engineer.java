@@ -65,6 +65,11 @@ public class Engineer extends PlayerCharacter {
     }
 
     @Override
+    public String getSprite() {
+        return "Engineer.png";
+    }
+
+    @Override
     public int hashCode() {
         return Objects.hash(super.hashCode(), Engineer.class);
     }
