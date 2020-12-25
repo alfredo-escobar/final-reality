@@ -1,7 +1,6 @@
 package com.github.cc3002.finalreality.controller;
 
 import com.github.cc3002.finalreality.model.character.Enemy;
-import com.github.cc3002.finalreality.model.character.ICharacter;
 import com.github.cc3002.finalreality.model.character.player.IPlayerCharacter;
 
 import java.beans.PropertyChangeEvent;

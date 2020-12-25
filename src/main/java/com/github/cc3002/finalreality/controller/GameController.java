@@ -1,5 +1,7 @@
 package com.github.cc3002.finalreality.controller;
 
+import com.github.cc3002.finalreality.gui.DummyGUI;
+import com.github.cc3002.finalreality.gui.IGUI;
 import com.github.cc3002.finalreality.model.character.AbstractCharacter;
 import com.github.cc3002.finalreality.model.character.Enemy;
 import com.github.cc3002.finalreality.model.character.ICharacter;
@@ -20,10 +22,11 @@ public class GameController {
     private final ArrayList<IPlayerCharacter> party = new ArrayList<>();
     private final ArrayList<Enemy> enemies = new ArrayList<>();
     private final ArrayList<IWeapon> inventory = new ArrayList<>();
+    protected BlockingQueue<ICharacter> turns = new LinkedBlockingQueue<>();
+
     private final IEventHandler handler = new Handler(this);
     private State state;
-
-    protected BlockingQueue<ICharacter> turns = new LinkedBlockingQueue<>();
+    private IGUI gui;
 
     /**
      * Creates a new controller and sets its initial
@@ -31,6 +34,7 @@ public class GameController {
      */
     public GameController() {
         this.setState(new State_PreparingParty());
+        this.setGUI(new DummyGUI());
     }
 
     /**
@@ -41,6 +45,15 @@ public class GameController {
     public void setState(State aState) {
         state = aState;
         state.setController(this);
+    }
+
+    /**
+     * Links a graphical user interface to this controller.
+     * @param gui
+     *       the GUI to be linked.
+     */
+    public void setGUI (IGUI gui) {
+        this.gui = gui;
     }
 
     /**
@@ -366,7 +379,7 @@ public class GameController {
      *      the position of the enemy
      */
     public String getEnemyName(int index) {
-        return ((AbstractCharacter)(enemies.get(index))).getName();
+        return enemies.get(index).getName();
     }
 
     /**
@@ -376,7 +389,7 @@ public class GameController {
      *      the position of the enemy
      */
     public int getEnemyHealth(int index) {
-        return ((AbstractCharacter)(enemies.get(index))).getHealth();
+        return enemies.get(index).getHealth();
     }
 
     /**
@@ -386,7 +399,7 @@ public class GameController {
      *      the position of the enemy
      */
     public int getEnemyDefense(int index) {
-        return ((AbstractCharacter)(enemies.get(index))).getDefense();
+        return enemies.get(index).getDefense();
     }
 
     /**
@@ -529,7 +542,8 @@ public class GameController {
     }
 
     void attackAnEnemy(int partyIndex, int enemyIndex) {
-        party.get(partyIndex).attack(enemies.get(enemyIndex));
+        int dmgDealt = party.get(partyIndex).attack(enemies.get(enemyIndex));
+        gui.playerAttack(enemyIndex, dmgDealt);
         state.removeFromQueue();
         removeFirstFromQueue();
     }
@@ -545,7 +559,8 @@ public class GameController {
     }
 
     void attackAPlayableCharacter(int enemyIndex, int partyIndex) {
-        enemies.get(enemyIndex).attack(party.get(partyIndex));
+        int dmgDealt = enemies.get(enemyIndex).attack(party.get(partyIndex));
+        gui.enemyAttack(partyIndex, dmgDealt);
         state.removeFromQueue();
         removeFirstFromQueue();
     }
@@ -562,6 +577,7 @@ public class GameController {
         var character = turns.element();
         if (party.contains(character)) {
             state.startPlayerTurn();
+            gui.updatePlayerTurnScreen();
         } else if (enemies.contains(character)) {
             state.startEnemyTurn();
             activeEnemyAttacksPlayerChar();
@@ -581,6 +597,7 @@ public class GameController {
     }
 
     void endTurn() {
+        gui.updateInfo();
         var character = turns.poll();
         character.waitTurn();
         startTurn();
@@ -616,8 +633,10 @@ public class GameController {
      */
     public void onPlayerCharacterDefeat(IPlayerCharacter character) {
         party.remove(character);
+        gui.updateInfo();
         if (party.size() == 0) {
             state.lose();
+            gui.gameLost();
         }
     }
 
@@ -630,8 +649,10 @@ public class GameController {
      */
     public void onEnemyDefeat(Enemy character) {
         enemies.remove(character);
+        gui.updateInfo();
         if (enemies.size() == 0) {
             state.win();
+            gui.gameWon();
         }
     }
 }

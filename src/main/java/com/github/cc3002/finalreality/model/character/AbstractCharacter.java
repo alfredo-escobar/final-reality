@@ -1,14 +1,12 @@
 package com.github.cc3002.finalreality.model.character;
 
 import com.github.cc3002.finalreality.controller.IEventHandler;
-import com.github.cc3002.finalreality.model.character.player.PlayerCharacter;
 
 import java.beans.PropertyChangeSupport;
 import java.util.Objects;
 import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -61,13 +59,17 @@ public abstract class AbstractCharacter implements ICharacter {
   }
 
   @Override
-  public void getAttacked(int damage) {
+  public int getAttacked(int damage) {
+    int dmgTaken = 0;
     if ((damage - this.defense)>0) {
-      this.health -= (damage - this.defense);
+      dmgTaken = damage - this.defense;
+      this.health -= dmgTaken;
       if (this.health < 0) {
+        dmgTaken += this.health;
         this.health = 0;
       }
     }
+    return dmgTaken;
   }
 
   @Override

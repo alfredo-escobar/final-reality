@@ -24,9 +24,7 @@ public class State_PreparingParty extends State {
     }
 
     @Override
-    public void selectFirst() {
-        System.out.println("There aren't enough playable characters.");
-    }
+    public void selectFirst() {}
 
     @Override
     public boolean isPreparingParty() {

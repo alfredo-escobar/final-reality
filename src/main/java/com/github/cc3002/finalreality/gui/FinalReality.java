@@ -2,7 +2,6 @@ package com.github.cc3002.finalreality.gui;
 
 import com.github.cc3002.finalreality.controller.GameController;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -10,15 +9,14 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.jetbrains.annotations.NotNull;
 
-import javax.sound.sampled.*;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -30,20 +28,22 @@ import java.util.Arrays;
  * @author Ignacio Slater Muñoz.
  * @author Alfredo Escobar
  */
-public class FinalReality extends Application {
+public class FinalReality extends Application implements IGUI{
 
+  GameController controller = new GameController();
+
+  Group root = new Group();
+  Group battleInfo = new Group();
+  Group playerTurnScreen = new Group();
+  Group inventory = new Group();
+  Group damageInfo = new Group();
+
+  private static final String RESOURCE_PATH = "src/main/resources/";
   ArrayList<String> knightNames = new ArrayList<>(Arrays.asList("Draug", "Dolph", "Macellan", "Roger", "?"));
   ArrayList<String> engineerNames = new ArrayList<>(Arrays.asList("Jake", "Beck", "Grigas", "Toras", "?"));
   ArrayList<String> thiefNames = new ArrayList<>(Arrays.asList("Julian", "Rickard", "Dahl", "Barm", "?"));
   ArrayList<String> bMageNames = new ArrayList<>(Arrays.asList("Merric", "Linde", "Arlen", "Jubelo", "?"));
   ArrayList<String> wMageNames = new ArrayList<>(Arrays.asList("Lena", "Maria", "Elice", "Wrys", "?"));
-
-  private static final String RESOURCE_PATH = "src/main/resources/";
-  GameController controller = new GameController();
-  Group root = new Group();
-  Group battleInfo = new Group();
-  Group playerTurnScreen = new Group();
-  Group inventory = new Group();
 
   public static void main(String[] args) {
     launch(args);
@@ -57,14 +57,17 @@ public class FinalReality extends Application {
     Scene scene = new Scene(root, width, height);
     var background =
         new ImageView(new Image(new FileInputStream(RESOURCE_PATH + "background.jpg")));
-
     root.getChildren().add(background);
+
+    controller.setGUI(this);
     controller.addEnemy("Bandit", 10, 4, 7, 10);
     setupInventory();
+
     root.getChildren().add(setupScreen());
-    root.getChildren().add(battleInfo);
     playerTurnScreen.getChildren().add(inventory);
     root.getChildren().add(playerTurnScreen);
+    root.getChildren().add(battleInfo);
+    root.getChildren().add(damageInfo);
     stage.setScene(scene);
     stage.show();
   }
@@ -173,7 +176,8 @@ public class FinalReality extends Application {
     controller.addBow("Parthia bow", 7, 8);
   }
 
-  private void updateInfo() {
+  @Override
+  public void updateInfo() {
     battleInfo.getChildren().clear();
     try {
       battleInfo.getChildren().add(characterSprites());
@@ -181,7 +185,6 @@ public class FinalReality extends Application {
     } catch (FileNotFoundException e) {
       e.printStackTrace();
     }
-    updatePlayerTurnScreen();
   }
 
   private Group characterSprites() throws FileNotFoundException {
@@ -202,7 +205,7 @@ public class FinalReality extends Application {
     return sprites;
   }
 
-  private Group characterHealth() throws FileNotFoundException {
+  private Group characterHealth() {
     Group hp = new Group();
     var playerCharAmount = controller.getAmountOfPlayerCharacters();
     for (int i=0; i<playerCharAmount; i++) {
@@ -225,7 +228,9 @@ public class FinalReality extends Application {
     return hp;
   }
 
-  private void updatePlayerTurnScreen() {
+  @Override
+  public void updatePlayerTurnScreen() {
+    clearDamageText();
     playerTurnScreen.getChildren().clear();
     var enemyAmount = controller.getAmountOfEnemies();
     for (int i=0; i<enemyAmount; i++) {
@@ -274,28 +279,83 @@ public class FinalReality extends Application {
     inventory.getChildren().add(wp_Text);
   }
 
-
-
-  private @NotNull Button setupButton() {
-    Button button = new Button("Play sound");
-    button.setLayoutX(500);
-    button.setLayoutY(500);
-    button.setFocusTraversable(false);
-    button.setOnAction(FinalReality::playSound);
-    return button;
+  @Override
+  public void playerAttack(int enemyIndex, int dmgDealt) {
+    clearDamageText();
+    var enemyAmount = controller.getAmountOfEnemies();
+    var setX = 280 - 33*enemyAmount + 80*enemyIndex;
+    var setY = 310 - 16*enemyAmount + 40*enemyIndex;
+    damageText(dmgDealt, setX, setY);
   }
 
-  private static void playSound(ActionEvent event) {
-    String audioFilePath = RESOURCE_PATH + "prfvr.wav";
-    try {
-      Clip sound = AudioSystem.getClip();
-      try (AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(
-          new File(audioFilePath))) {
-        sound.open(audioInputStream);
-        sound.start();
-      }
-    } catch (LineUnavailableException | UnsupportedAudioFileException | IOException e) {
+  @Override
+  public void enemyAttack(int partyIndex, int dmgDealt) {
+    clearDamageText();
+    var playerCharAmount = controller.getAmountOfPlayerCharacters();
+    var setX = 700 - 20*partyIndex;
+    var setY = 315 - 26*playerCharAmount + 70*partyIndex;
+    damageText(dmgDealt, setX, setY);
+  }
+
+  private void damageText(int dmgDealt, int setX, int setY) {
+    var damageText = new Text(setX, setY, String.valueOf(-dmgDealt));
+    damageText.setFont(Font.font(35));
+    damageText.setFill(Color.RED);
+    damageInfo.getChildren().add(damageText);
+  }
+
+  private void clearDamageText() {
+/*    try {
+      Thread.sleep(1000);
+    } catch (InterruptedException e) {
       e.printStackTrace();
-    }
+    }*/
+    damageInfo.getChildren().clear();
   }
+
+  @Override
+  public void gameWon() {
+    endingMessage("You won!", 320, Color.WHITE, Color.BLACK);
+  }
+
+  @Override
+  public void gameLost() {
+    endingMessage("Game over", 300, Color.BLACK, Color.WHITE);
+  }
+
+  private void endingMessage(String text, int x, Color fill, Color stroke) {
+    clearDamageText();
+    playerTurnScreen.getChildren().clear();
+    var endText = new Text(x, 300, text);
+    endText.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 60));
+    endText.setFill(fill);
+    endText.setStrokeWidth(2);
+    endText.setStroke(stroke);
+    root.getChildren().add(endText);
+  }
+
+
+
+//  private @NotNull Button setupButton() {
+//    Button button = new Button("Play sound");
+//    button.setLayoutX(500);
+//    button.setLayoutY(500);
+//    button.setFocusTraversable(false);
+//    button.setOnAction(FinalReality::playSound);
+//    return button;
+//  }
+//
+//  private static void playSound(ActionEvent event) {
+//    String audioFilePath = RESOURCE_PATH + "prfvr.wav";
+//    try {
+//      Clip sound = AudioSystem.getClip();
+//      try (AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(
+//          new File(audioFilePath))) {
+//        sound.open(audioInputStream);
+//        sound.start();
+//      }
+//    } catch (LineUnavailableException | UnsupportedAudioFileException | IOException e) {
+//      e.printStackTrace();
+//    }
+//  }
 }

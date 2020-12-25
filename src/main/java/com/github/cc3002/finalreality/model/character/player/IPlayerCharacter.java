@@ -24,9 +24,9 @@ public interface IPlayerCharacter {
     IWeapon getEquippedWeapon();
 
     /**
-     * Attacks an enemy
+     * Attacks an enemy and returns the damage dealt.
      * @param opponent
      *     the enemy to be attacked
      */
-    void attack(Enemy opponent);
+    int attack(Enemy opponent);
 }
