@@ -27,47 +27,47 @@ public class State {
      * Changes the state to "Party Ready" if the current
      * state is "Preparing Party".
      */
-    public void ready() {}
+    public void setPartyReady() {}
 
     /**
      * Changes the state to "Battle Won"
      */
-    public void win() {
+    public void setBattleWon() {
         this.changeState(new State_BattleWon());
     }
 
     /**
      * Changes the state to "Battle Lost"
      */
-    public void lose() {
+    public void setBattleLost() {
         this.changeState(new State_BattleLost());
     }
 
     /**
      * Changes the state to "Selecting First In Queue".
      */
-    public void selectFirst() {
+    public void setSelectingFirstInQueue() {
         error();
     }
 
     /**
      * Changes the state to "Player Turn".
      */
-    public void startPlayerTurn() {
+    public void setPlayerTurn() {
         error();
     }
 
     /**
      * Changes the state to "Enemy Turn".
      */
-    public void startEnemyTurn() {
+    public void setEnemyTurn() {
         error();
     }
 
     /**
-     * Changes the state to "Removing Character From Queue".
+     * Changes the state to "End Of Turn".
      */
-    public void removeFromQueue() {
+    public void setEndOfTurn() {
         error();
     }
 
@@ -114,9 +114,9 @@ public class State {
     }
 
     /**
-     * Returns true if the current state is "Removing Character From Queue"
+     * Returns true if the current state is "End Of Turn"
      */
-    public boolean isRemovingCharacterFromQueue() {
+    public boolean isEndOfTurn() {
         return false;
     }
 
@@ -128,38 +128,52 @@ public class State {
     }
 
     /**
-     * Adds a Player Character if current state is "Preparing Party"
+     * Adds a Player Character
+     * For state: Preparing Party.
      */
     public void addPlayerCharacter(IPlayerCharacter playerCharacter) {}
 
     /**
-     * Starts the action of the first character in the turns queue
-     * if current state is "Selecting First in Queue".
+     * Starts the timer of every character.
+     * For state: Party Ready.
      */
-    public void characterInQueue() {}
+    public void setAllTimers() {}
 
     /**
-     * Makes a playable character equip a weapon
-     * if current state is "Player Turn".
+     * Checks if there is a character in the
+     * turns queue, or waits for them to arrive.
+     * For state: End Of Turn.
+     */
+    public void checkInQueue() {}
+
+    /**
+     * Starts the action of the first character in the turns queue.
+     * For state: Selecting First In Queue.
+     */
+    public void prepareForCharAction() {}
+
+    /**
+     * Makes a playable character equip a weapon.
+     * For state: Player Turn.
      */
     public void equipToCharacter(int partyIndex, int weaponIndex) {}
 
     /**
-     * Makes a playable character attack an enemy
-     * if current state is "Player Turn".
+     * Makes a playable character attack an enemy.
+     * For state: Player Turn.
      */
     public void attackAnEnemy(int partyIndex, int enemyIndex) {}
 
     /**
-     * Makes an enemy attack a playable character
-     * if current state is "Enemy Turn".
+     * Makes an enemy attack a playable character.
+     * For state: Enemy Turn.
      */
     public void attackAPlayerCharacter(int enemyIndex, int partyIndex) {}
 
     /**
      * Takes a character in an active turn and
-     * makes it wait on the turns queue,
-     * if current state is "Removing Character From Queue".
+     * makes it wait on the turns queue.
+     * For state: End Of Turn.
      */
     public void endTurn() {}
 }

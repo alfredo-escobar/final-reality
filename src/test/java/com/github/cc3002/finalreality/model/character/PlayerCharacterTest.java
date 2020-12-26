@@ -199,4 +199,12 @@ class PlayerCharacterTest extends AbstractCharacterTest {
     assertNotEquals(differentDefenseMage, testWhiteMage);
     assertNotEquals(differentManaMage, testWhiteMage);
   }
+
+  @Test
+  void GetSprites() {
+    assertEquals("Engineer.png", testEngineer.getSprite());
+    assertEquals("Thief.png", testThief.getSprite());
+    assertEquals("BlackMage.png", testBlackMage.getSprite());
+    assertEquals("WhiteMage.png", testWhiteMage.getSprite());
+  }
 }

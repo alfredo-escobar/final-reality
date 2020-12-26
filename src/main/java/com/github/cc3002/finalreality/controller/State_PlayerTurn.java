@@ -7,8 +7,8 @@ package com.github.cc3002.finalreality.controller;
 public class State_PlayerTurn extends State {
 
     @Override
-    public void removeFromQueue() {
-        this.changeState(new State_RemovingCharacterFromQueue());
+    public void setEndOfTurn() {
+        this.changeState(new State_EndOfTurn());
     }
 
     @Override

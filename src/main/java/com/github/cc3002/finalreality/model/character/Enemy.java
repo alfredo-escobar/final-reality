@@ -79,6 +79,7 @@ public class Enemy extends AbstractCharacter {
   public void waitTurn() {
     scheduledExecutor = Executors.newSingleThreadScheduledExecutor();
     scheduledExecutor.schedule(this::addToQueue, this.getWeight() / 10, TimeUnit.SECONDS);
+    event.firePropertyChange("Ended turn", null, null);
   }
 
   @Override

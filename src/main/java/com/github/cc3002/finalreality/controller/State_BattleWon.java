@@ -6,26 +6,26 @@ package com.github.cc3002.finalreality.controller;
 public class State_BattleWon extends State {
 
     @Override
-    public void win() {
+    public void setBattleWon() {
         error();
     }
 
     @Override
-    public void lose() {
+    public void setBattleLost() {
         error();
     }
 
     @Override
-    public void selectFirst() {}
+    public void setSelectingFirstInQueue() {}
 
     @Override
-    public void startPlayerTurn() {}
+    public void setPlayerTurn() {}
 
     @Override
-    public void startEnemyTurn() {}
+    public void setEnemyTurn() {}
 
     @Override
-    public void removeFromQueue() {}
+    public void setEndOfTurn() {}
 
     @Override
     public boolean isBattleWon() {

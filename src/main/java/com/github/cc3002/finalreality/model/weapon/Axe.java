@@ -31,4 +31,9 @@ public class Axe extends Weapon {
     public boolean canEngineerEquip() {
         return true;
     };
+
+    @Override
+    public String getSprite() {
+        return "Axe.png";
+    }
 }

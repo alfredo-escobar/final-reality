@@ -9,22 +9,22 @@ import com.github.cc3002.finalreality.model.character.player.IPlayerCharacter;
 public class State_PreparingParty extends State {
 
     @Override
-    public void win() {
+    public void setBattleWon() {
         error();
     }
 
     @Override
-    public void lose() {
+    public void setBattleLost() {
         error();
     }
 
     @Override
-    public void ready() {
+    public void setPartyReady() {
         this.changeState(new State_PartyReady());
     }
 
     @Override
-    public void selectFirst() {}
+    public void setSelectingFirstInQueue() {}
 
     @Override
     public boolean isPreparingParty() {

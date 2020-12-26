@@ -42,7 +42,7 @@ class TurnsTest {
 
         controller.startGame();
 
-        Thread.sleep(2500);
+        Thread.sleep(2800);
         while ((controller.getAmountOfPlayerCharacters() > 0)
                 & (controller.getAmountOfEnemies() > 0)) {
 
@@ -85,7 +85,7 @@ class TurnsTest {
 
         controller.startGame();
 
-        Thread.sleep(2500);
+        Thread.sleep(2800);
         while ((controller.getAmountOfPlayerCharacters() > 0)
                 & (controller.getAmountOfEnemies() > 0)) {
 

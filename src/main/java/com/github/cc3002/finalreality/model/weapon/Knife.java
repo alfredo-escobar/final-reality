@@ -36,4 +36,9 @@ public class Knife extends Weapon {
     public boolean canBlackMageEquip() {
         return true;
     };
+
+    @Override
+    public String getSprite() {
+        return "Knife.png";
+    }
 }

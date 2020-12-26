@@ -65,6 +65,7 @@ public abstract class PlayerCharacter extends AbstractCharacter implements IPlay
   public void waitTurn() {
     scheduledExecutor = Executors.newSingleThreadScheduledExecutor();
     scheduledExecutor.schedule(this::addToQueue, equippedWeapon.getWeight() / 10, TimeUnit.SECONDS);
+    event.firePropertyChange("Ended turn", null, null);
   }
 
   @Override

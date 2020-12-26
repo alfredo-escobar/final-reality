@@ -19,6 +19,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Main entry point for the application.
@@ -60,7 +61,7 @@ public class FinalReality extends Application implements IGUI{
     root.getChildren().add(background);
 
     controller.setGUI(this);
-    controller.addEnemy("Bandit", 10, 4, 7, 10);
+    controller.addEnemy("Bandit", 10, 4, 7, 9);
     setupInventory();
 
     root.getChildren().add(setupScreen());
@@ -84,13 +85,23 @@ public class FinalReality extends Application implements IGUI{
     PC_Text.setFill(Color.WHITE);
     setupScr.getChildren().add(PC_Text);
 
+    Text enemyText = new Text(250, 350, "Enemies: 1");
+    enemyText.setFont(Font.font(30));
+    enemyText.setFill(Color.WHITE);
+    setupScr.getChildren().add(enemyText);
+
+    Text err_Text = new Text(500, 350, "");
+    err_Text.setFont(Font.font(15));
+    err_Text.setFill(Color.WHITE);
+    setupScr.getChildren().add(err_Text);
+
     Button knightButton = new Button("Add Knight");
     knightButton.setLayoutX(250);
     knightButton.setLayoutY(250);
     knightButton.setOnAction((event -> {
       controller.addKnightWithSword(knightNames.get(controller.getAmountOfPlayerCharacters()),
-              8, 6,
-              "Iron sword", 2, 2);
+              6, 5,
+              "Iron sword", 6, 6);
       PC_Text.setText("Player Characters: " + controller.getAmountOfPlayerCharacters());
     }));
     setupScr.getChildren().add(knightButton);
@@ -101,7 +112,7 @@ public class FinalReality extends Application implements IGUI{
     engButton.setOnAction((event -> {
       controller.addEngineerWithAxe(engineerNames.get(controller.getAmountOfPlayerCharacters()),
               7, 4,
-              "Iron axe", 2, 2);
+              "Iron axe", 7, 9);
       PC_Text.setText("Player Characters: " + controller.getAmountOfPlayerCharacters());
     }));
     setupScr.getChildren().add(engButton);
@@ -111,8 +122,8 @@ public class FinalReality extends Application implements IGUI{
     thiefButton.setLayoutY(250);
     thiefButton.setOnAction((event -> {
       controller.addThiefWithKnife(thiefNames.get(controller.getAmountOfPlayerCharacters()),
-              7, 4,
-              "Iron knife", 2, 2);
+              8, 3,
+              "Iron knife", 5, 3);
       PC_Text.setText("Player Characters: " + controller.getAmountOfPlayerCharacters());
     }));
     setupScr.getChildren().add(thiefButton);
@@ -122,8 +133,8 @@ public class FinalReality extends Application implements IGUI{
     bMageButton.setLayoutY(250);
     bMageButton.setOnAction((event -> {
       controller.addBlackMageWithStaff(bMageNames.get(controller.getAmountOfPlayerCharacters()),
-              7, 2, 10,
-              "Wind staff", 2, 2, 2);
+              10, 2, 10,
+              "Fire staff", 5, 3, 5);
       PC_Text.setText("Player Characters: " + controller.getAmountOfPlayerCharacters());
     }));
     setupScr.getChildren().add(bMageButton);
@@ -133,22 +144,19 @@ public class FinalReality extends Application implements IGUI{
     wMageButton.setLayoutY(250);
     wMageButton.setOnAction((event -> {
       controller.addWhiteMageWithStaff(wMageNames.get(controller.getAmountOfPlayerCharacters()),
-              7, 2, 10,
-              "Wind staff", 2, 2, 2);
+              12, 2, 10,
+              "Wind staff", 6, 6, 6);
       PC_Text.setText("Player Characters: " + controller.getAmountOfPlayerCharacters());
     }));
     setupScr.getChildren().add(wMageButton);
-
-    Text enemyText = new Text(250, 350, "Enemies: 1");
-    enemyText.setFont(Font.font(30));
-    enemyText.setFill(Color.WHITE);
-    setupScr.getChildren().add(enemyText);
 
     Button enemyButton = new Button("Add Enemy");
     enemyButton.setLayoutX(250);
     enemyButton.setLayoutY(360);
     enemyButton.setOnAction((event -> {
-      controller.addEnemy("Bandit", 10, 4, 7, 10);
+      int damage = ThreadLocalRandom.current().nextInt(6, 10);
+      int weight = (damage - 4) * 3;
+      controller.addEnemy("Bandit", 10, 4, damage, weight);
       enemyText.setText("Enemies: " + controller.getAmountOfEnemies());
     }));
     setupScr.getChildren().add(enemyButton);
@@ -161,6 +169,8 @@ public class FinalReality extends Application implements IGUI{
         controller.startGame();
         setupScr.getChildren().clear();
         updateInfo();
+      } else {
+        err_Text.setText("You need 4 characters in your party");
       }
     }));
     setupScr.getChildren().add(startButton);
@@ -169,11 +179,11 @@ public class FinalReality extends Application implements IGUI{
   }
 
   private void setupInventory() {
-    controller.addSword("Mercurius sword", 8, 10);
-    controller.addAxe("Hauteclere axe", 16, 14);
-    controller.addKnife("Kard knife", 5, 3);
-    controller.addStaff("Starlight staff", 1, 8, 8);
-    controller.addBow("Parthia bow", 7, 8);
+    controller.addSword("Mercurius sword", 9, 15);
+    controller.addAxe("Hauteclere axe", 10, 18);
+    controller.addKnife("Kard knife", 7, 9);
+    controller.addStaff("Starlight staff", 9, 15, 9);
+    controller.addBow("Parthia bow", 8, 12);
   }
 
   @Override
@@ -230,7 +240,7 @@ public class FinalReality extends Application implements IGUI{
 
   @Override
   public void updatePlayerTurnScreen() {
-    clearDamageText();
+    // clearDamageText();
     playerTurnScreen.getChildren().clear();
     var enemyAmount = controller.getAmountOfEnemies();
     for (int i=0; i<enemyAmount; i++) {
@@ -277,30 +287,46 @@ public class FinalReality extends Application implements IGUI{
     wp_Text.setFont(Font.font(35));
     wp_Text.setFill(Color.WHITE);
     inventory.getChildren().add(wp_Text);
+
+    var WEAPON_IMAGE = controller.getActivePlayerCharWeaponSprite();
+    var playerIndex = controller.getActivePlayerCharIndex();
+    var playerCharAmount = controller.getAmountOfPlayerCharacters();
+    ImageView sprite = null;
+    try {
+      sprite = new ImageView(new Image(new FileInputStream(RESOURCE_PATH + WEAPON_IMAGE)));
+    } catch (FileNotFoundException e) {
+      e.printStackTrace();
+    }
+    sprite.setX(658 - 20*playerIndex);
+    sprite.setY(315 - 26*playerCharAmount + 70*playerIndex);
+    inventory.getChildren().add(sprite);
   }
 
   @Override
   public void playerAttack(int enemyIndex, int dmgDealt) {
     clearDamageText();
     var enemyAmount = controller.getAmountOfEnemies();
-    var setX = 280 - 33*enemyAmount + 80*enemyIndex;
-    var setY = 310 - 16*enemyAmount + 40*enemyIndex;
+    var setX = 350 - 33*enemyAmount + 80*enemyIndex;
+    var setY = 330 - 16*enemyAmount + 40*enemyIndex;
     damageText(dmgDealt, setX, setY);
   }
 
   @Override
   public void enemyAttack(int partyIndex, int dmgDealt) {
-    clearDamageText();
+    // clearDamageText();
     var playerCharAmount = controller.getAmountOfPlayerCharacters();
-    var setX = 700 - 20*partyIndex;
-    var setY = 315 - 26*playerCharAmount + 70*partyIndex;
+    var limitX = 760 - 20*partyIndex;
+    var setX = ThreadLocalRandom.current().nextInt(limitX, 875);
+    var setY = 340 - 26*playerCharAmount + 70*partyIndex;
     damageText(dmgDealt, setX, setY);
   }
 
   private void damageText(int dmgDealt, int setX, int setY) {
     var damageText = new Text(setX, setY, String.valueOf(-dmgDealt));
-    damageText.setFont(Font.font(35));
+    damageText.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 50));
     damageText.setFill(Color.RED);
+    damageText.setStrokeWidth(2.5);
+    damageText.setStroke(Color.BLACK);
     damageInfo.getChildren().add(damageText);
   }
 
@@ -333,29 +359,4 @@ public class FinalReality extends Application implements IGUI{
     endText.setStroke(stroke);
     root.getChildren().add(endText);
   }
-
-
-
-//  private @NotNull Button setupButton() {
-//    Button button = new Button("Play sound");
-//    button.setLayoutX(500);
-//    button.setLayoutY(500);
-//    button.setFocusTraversable(false);
-//    button.setOnAction(FinalReality::playSound);
-//    return button;
-//  }
-//
-//  private static void playSound(ActionEvent event) {
-//    String audioFilePath = RESOURCE_PATH + "prfvr.wav";
-//    try {
-//      Clip sound = AudioSystem.getClip();
-//      try (AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(
-//          new File(audioFilePath))) {
-//        sound.open(audioInputStream);
-//        sound.start();
-//      }
-//    } catch (LineUnavailableException | UnsupportedAudioFileException | IOException e) {
-//      e.printStackTrace();
-//    }
-//  }
 }

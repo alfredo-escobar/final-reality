@@ -73,6 +73,11 @@ public abstract class AbstractCharacter implements ICharacter {
   }
 
   @Override
+  public String getSprite() {
+    return " ";
+  }
+
+  @Override
   public boolean equals(final Object o) {
     if (this == o) {
       return true;

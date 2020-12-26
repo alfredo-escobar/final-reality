@@ -7,22 +7,27 @@ package com.github.cc3002.finalreality.controller;
 public class State_PartyReady extends State {
 
     @Override
-    public void selectFirst() {
-        this.changeState(new State_SelectingFirstInQueue());
+    public void setEndOfTurn() {
+        this.changeState(new State_EndOfTurn());
     }
 
     @Override
-    public void win() {
+    public void setBattleWon() {
         error();
     }
 
     @Override
-    public void lose() {
+    public void setBattleLost() {
         error();
     }
 
     @Override
     public boolean isPartyReady() {
         return true;
+    }
+
+    @Override
+    public void setAllTimers() {
+        controller.setAllTimers();
     }
 }

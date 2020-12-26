@@ -25,6 +25,9 @@ public class Handler implements IEventHandler {
             case "Added to queue":
                 controller.characterInQueue();
                 break;
+            case "Ended turn":
+                controller.startTurn();
+                break;
             case "Player character defeated":
                 controller.onPlayerCharacterDefeat((IPlayerCharacter) evt.getNewValue());
                 break;

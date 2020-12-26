@@ -7,12 +7,12 @@ package com.github.cc3002.finalreality.controller;
 public class State_SelectingFirstInQueue extends State {
 
     @Override
-    public void startPlayerTurn() {
+    public void setPlayerTurn() {
         this.changeState(new State_PlayerTurn());
     }
 
     @Override
-    public void startEnemyTurn() {
+    public void setEnemyTurn() {
         this.changeState(new State_EnemyTurn());
     }
 
@@ -22,7 +22,7 @@ public class State_SelectingFirstInQueue extends State {
     }
 
     @Override
-    public void characterInQueue() {
-        controller.startFirstInQueueTurn();
+    public void prepareForCharAction() {
+        controller.prepareForCharAction();
     }
 }

@@ -57,4 +57,10 @@ public interface IWeapon {
    * class can't equip this weapon.
    */
   boolean canGenericCharacterEquip();
+
+  /**
+   * Returns the name of the image file to be used
+   * as a sprite for this weapon.
+   */
+  String getSprite();
 }

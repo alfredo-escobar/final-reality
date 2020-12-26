@@ -31,4 +31,9 @@ public class Sword extends Weapon {
     public boolean canThiefEquip() {
         return true;
     };
+
+    @Override
+    public String getSprite() {
+        return "Sword.png";
+    }
 }

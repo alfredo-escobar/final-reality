@@ -106,7 +106,7 @@ public class GameController {
      * Returns true if the current state is "Removing Character From Queue"
      */
     public boolean isRemovingCharacterFromQueue() {
-        return state.isRemovingCharacterFromQueue();
+        return state.isEndOfTurn();
     }
 
     /**
@@ -120,7 +120,7 @@ public class GameController {
         party.add(playerCharacter);
         ((ICharacter)(party.get(party.size() - 1))).addListener(handler);
         if (party.size() == 4) {
-            state.ready();
+            state.setPartyReady();
         }
     }
 
@@ -494,6 +494,13 @@ public class GameController {
     }
 
     /**
+     * Returns the active player character's index.
+     */
+    public int getActivePlayerCharIndex() {
+        return party.indexOf(turns.element());
+    }
+
+    /**
      * Returns the active player character's name.
      */
     public String getActivePlayerCharName() {
@@ -511,8 +518,84 @@ public class GameController {
     }
 
     /**
+     * Returns the name of the image file to be used as a
+     * sprite for the active player character's weapon.
+     */
+    public String getActivePlayerCharWeaponSprite() {
+        var weapon = ((IPlayerCharacter)turns.element()).getEquippedWeapon();
+        return weapon.getSprite();
+    }
+
+
+
+
+
+    /**
+     * Starts the timer of every character.
+     * For state: Party Ready.
+     */
+    public void startGame() {
+        state.setAllTimers();
+    }
+
+    void setAllTimers() {
+        for (IPlayerCharacter playerChar : party) {
+            ((ICharacter)(playerChar)).waitTurn();
+        }
+        for (Enemy enemy : enemies) {
+            enemy.waitTurn();
+        }
+        try {
+            Thread.sleep(300);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        state.setEndOfTurn();
+        startTurn();
+    }
+
+    /**
+     * Checks if there is a character in the
+     * turns queue, or waits for them to arrive.
+     * For state: End Of Turn.
+     */
+    public void startTurn() {
+        state.checkInQueue();
+    }
+
+    void checkInQueue() {
+        state.setSelectingFirstInQueue();
+        if (turns.size() > 0) {
+            characterInQueue();
+        }
+    }
+
+    /**
+     * Starts the action of the first character in the turns queue
+     * For state: Selecting First In Queue.
+     */
+    public void characterInQueue() {
+        state.prepareForCharAction();
+    }
+
+    void prepareForCharAction() {
+        var character = turns.element();
+        if (party.contains(character)) {
+            state.setPlayerTurn();
+            gui.updatePlayerTurnScreen();
+        } else if (enemies.contains(character)) {
+            state.setEnemyTurn();
+            activeEnemyAttacksPlayerChar();
+        } else if (turns.size() > 1) {
+            turns.poll();
+            prepareForCharAction();
+        }
+    }
+
+    /**
      * Equips a weapon to the first player character
-     * in the turns queue
+     * in the turns queue.
+     * For state: Player Turn.
      * @param weaponIndex
      *      the position in the inventory of the weapon
      */
@@ -533,6 +616,7 @@ public class GameController {
     /**
      * Makes the first player character in the
      * turns queue attack an enemy.
+     * For state: Player Turn.
      * @param enemyIndex
      *      the position in the enemy group of the enemy
      */
@@ -544,13 +628,14 @@ public class GameController {
     void attackAnEnemy(int partyIndex, int enemyIndex) {
         int dmgDealt = party.get(partyIndex).attack(enemies.get(enemyIndex));
         gui.playerAttack(enemyIndex, dmgDealt);
-        state.removeFromQueue();
+        state.setEndOfTurn();
         removeFirstFromQueue();
     }
 
     /**
      * Makes the first enemy in the turns
-     * queue attack a player character.
+     * queue attack a random player character.
+     * For state: Enemy Turn.
      */
     public void activeEnemyAttacksPlayerChar() {
         int enemyIndex = enemies.indexOf(turns.element());
@@ -561,36 +646,14 @@ public class GameController {
     void attackAPlayableCharacter(int enemyIndex, int partyIndex) {
         int dmgDealt = enemies.get(enemyIndex).attack(party.get(partyIndex));
         gui.enemyAttack(partyIndex, dmgDealt);
-        state.removeFromQueue();
+        state.setEndOfTurn();
         removeFirstFromQueue();
     }
 
     /**
-     * Starts the action of the first character in the turns queue
-     * if current state is "Selecting First in Queue".
-     */
-    public void characterInQueue() {
-        state.characterInQueue();
-    }
-
-    void startFirstInQueueTurn() {
-        var character = turns.element();
-        if (party.contains(character)) {
-            state.startPlayerTurn();
-            gui.updatePlayerTurnScreen();
-        } else if (enemies.contains(character)) {
-            state.startEnemyTurn();
-            activeEnemyAttacksPlayerChar();
-        } else if (turns.size() > 1) {
-            turns.poll();
-            startFirstInQueueTurn();
-        }
-    }
-
-    /**
      * Takes a character in an active turn and
-     * makes it wait on the turns queue. If there is
-     * another character on the queue, calls startTurn()
+     * makes it wait on the turns queue.
+     * For state: End Of Turn
      */
     public void removeFirstFromQueue() {
         state.endTurn();
@@ -600,30 +663,9 @@ public class GameController {
         gui.updateInfo();
         var character = turns.poll();
         character.waitTurn();
-        startTurn();
     }
 
-    /**
-     * Starts the timer of every character, then
-     * waits for the first character to appear
-     * in the queue
-     */
-    public void startGame() {
-        for (IPlayerCharacter playerChar : party) {
-            ((ICharacter)(playerChar)).waitTurn();
-        }
-        for (Enemy enemy : enemies) {
-            enemy.waitTurn();
-        }
-        startTurn();
-    }
 
-    void startTurn() {
-        state.selectFirst();
-        if (turns.size() > 0) {
-            characterInQueue();
-        }
-    }
 
     /**
      * Removes a defeated player character from the party.
@@ -635,7 +677,7 @@ public class GameController {
         party.remove(character);
         gui.updateInfo();
         if (party.size() == 0) {
-            state.lose();
+            state.setBattleLost();
             gui.gameLost();
         }
     }
@@ -651,7 +693,7 @@ public class GameController {
         enemies.remove(character);
         gui.updateInfo();
         if (enemies.size() == 0) {
-            state.win();
+            state.setBattleWon();
             gui.gameWon();
         }
     }

@@ -97,7 +97,9 @@ class ControllerTest {
         assertEquals(5, controller.getAmountOfWeapons());
         controller.startGame();
         Thread.sleep(1000);
+        assertEquals(0, controller.getActivePlayerCharIndex());
         assertEquals("Draug", controller.getActivePlayerCharName());
         assertEquals("Iron sword (Damage: 2)", controller.getActivePlayerCharWeaponData());
+        assertEquals("Sword.png", controller.getActivePlayerCharWeaponSprite());
     }
 }

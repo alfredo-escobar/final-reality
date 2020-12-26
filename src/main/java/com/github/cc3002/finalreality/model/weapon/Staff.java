@@ -66,4 +66,9 @@ public class Staff extends Weapon {
     public boolean canWhiteMageEquip() {
         return true;
     };
+
+    @Override
+    public String getSprite() {
+        return "Staff.png";
+    }
 }
