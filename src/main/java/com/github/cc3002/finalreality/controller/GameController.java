@@ -626,8 +626,9 @@ public class GameController {
     }
 
     void attackAnEnemy(int partyIndex, int enemyIndex) {
+        int enemyAmount = enemies.size();
         int dmgDealt = party.get(partyIndex).attack(enemies.get(enemyIndex));
-        gui.playerAttack(enemyIndex, dmgDealt);
+        gui.playerAttack(enemyIndex, enemyAmount, dmgDealt);
         state.setEndOfTurn();
         removeFirstFromQueue();
     }
@@ -644,8 +645,9 @@ public class GameController {
     }
 
     void attackAPlayableCharacter(int enemyIndex, int partyIndex) {
+        int playerCharAmount = party.size();
         int dmgDealt = enemies.get(enemyIndex).attack(party.get(partyIndex));
-        gui.enemyAttack(partyIndex, dmgDealt);
+        gui.enemyAttack(partyIndex, playerCharAmount, dmgDealt);
         state.setEndOfTurn();
         removeFirstFromQueue();
     }

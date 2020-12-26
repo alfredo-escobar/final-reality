@@ -79,12 +79,6 @@ public abstract class AbstractCharacter implements ICharacter {
 
   @Override
   public boolean equals(final Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o.getClass() != this.getClass()) {
-      return false;
-    }
     final AbstractCharacter that = (AbstractCharacter) o;
     return getName().equals(that.getName())
             && getHealth() == that.getHealth()

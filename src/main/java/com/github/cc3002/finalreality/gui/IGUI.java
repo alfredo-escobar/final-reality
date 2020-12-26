@@ -26,20 +26,26 @@ public interface IGUI {
      * Shows the amount of damage an enemy has received.
      * @param enemyIndex
      *      the position of the enemy.
+     * @param enemyAmount
+     *      the amount of enemies at the time
+     *      of the attack.
      * @param dmgDealt
      *      the damage taken by the enemy.
      */
-    void playerAttack(int enemyIndex, int dmgDealt);
+    void playerAttack(int enemyIndex, int enemyAmount, int dmgDealt);
 
     /**
      * Shows the amount of damage a player character
      * has received.
      * @param partyIndex
      *      the position of the player character.
+     * @param playerCharAmount
+     *      the amount of player characters at the
+     *      time of the attack.
      * @param dmgDealt
      *      the damage taken by the enemy.
      */
-    void enemyAttack(int partyIndex, int dmgDealt);
+    void enemyAttack(int partyIndex, int playerCharAmount, int dmgDealt);
 
     /**
      * Shows the Game Won screen.

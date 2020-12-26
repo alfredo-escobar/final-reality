@@ -303,21 +303,19 @@ public class FinalReality extends Application implements IGUI{
   }
 
   @Override
-  public void playerAttack(int enemyIndex, int dmgDealt) {
+  public void playerAttack(int enemyIndex, int enemyAmount, int dmgDealt) {
     clearDamageText();
-    var enemyAmount = controller.getAmountOfEnemies();
-    var setX = 350 - 33*enemyAmount + 80*enemyIndex;
+    var setX = 300 - 33*enemyAmount + 80*enemyIndex;
     var setY = 330 - 16*enemyAmount + 40*enemyIndex;
     damageText(dmgDealt, setX, setY);
   }
 
   @Override
-  public void enemyAttack(int partyIndex, int dmgDealt) {
+  public void enemyAttack(int partyIndex, int playerCharAmount, int dmgDealt) {
     // clearDamageText();
-    var playerCharAmount = controller.getAmountOfPlayerCharacters();
     var limitX = 760 - 20*partyIndex;
     var setX = ThreadLocalRandom.current().nextInt(limitX, 875);
-    var setY = 340 - 26*playerCharAmount + 70*partyIndex;
+    var setY = 350 - 26*playerCharAmount + 70*partyIndex;
     damageText(dmgDealt, setX, setY);
   }
 
