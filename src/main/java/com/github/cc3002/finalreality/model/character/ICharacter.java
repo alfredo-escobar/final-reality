@@ -33,11 +33,11 @@ public interface ICharacter {
   int getDefense();
 
   /**
-   * Gets this unit attacked
+   * Gets this unit attacked and returns the damage taken.
    * @param damage
    *     the damage points inflicted by the attacker.
    */
-  void getAttacked(int damage);
+  int getAttacked(int damage);
 
   /**
    * Adds a handler to listen to this character's calls.
@@ -45,4 +45,10 @@ public interface ICharacter {
    *     the handler that will listen to the calls.
    */
   void addListener(IEventHandler handler);
+
+  /**
+   * Returns the name of the image file to be used
+   * as a sprite for this character.
+   */
+  String getSprite();
 }

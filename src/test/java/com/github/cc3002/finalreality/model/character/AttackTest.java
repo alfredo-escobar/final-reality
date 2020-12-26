@@ -46,6 +46,10 @@ class AttackTest extends AbstractSetUp {
 
         ((IPlayerCharacter)testKnight).attack(((Enemy)testEnemy)); // Enemy defeated
         assertEquals(0, testEnemy.getHealth());
+
+        // Knight tries to attack a dead enemy, just in case.
+        ((IPlayerCharacter)testKnight).attack(((Enemy)testEnemy));
+        assertEquals(0, testEnemy.getHealth());
     }
 
     @Test
@@ -55,6 +59,10 @@ class AttackTest extends AbstractSetUp {
         assertEquals(KnightHealth - (EnemyStrength-KnightDefense), testKnight.getHealth());
 
         ((Enemy)testEnemy).attack((IPlayerCharacter)testKnight); // Knight defeated
+        assertEquals(0, testKnight.getHealth());
+
+        // Enemy tries to attack a dead character, just in case.
+        ((Enemy)testEnemy).attack((IPlayerCharacter)testKnight);
         assertEquals(0, testKnight.getHealth());
     }
 }

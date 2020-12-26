@@ -6,7 +6,8 @@ import com.github.cc3002.finalreality.model.weapon.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
-import org.junit.jupiter.api.Assertions;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,37 +19,31 @@ class ControllerTest {
     void setUp() {
         controller = new GameController();
 
-        assert controller.isPreparingParty();
-        assert !controller.isPartyReady();
-        assert !controller.isBattleWon();
-        assert !controller.isBattleLost();
+        assertTrue(controller.isPreparingParty());
+        assertFalse(controller.isPartyReady());
+        assertFalse(controller.isBattleWon());
+        assertFalse(controller.isBattleLost());
+        assertFalse(controller.isPlayerTurn());
+        assertFalse(controller.isEnemyTurn());
+        assertFalse(controller.isRemovingCharacterFromQueue());
+        assertFalse(controller.isSelectingFirstInQueue());
 
-        controller.addKnight("Draug", 8, 6,
-                new Sword("Iron sword", 2, 2));
-        controller.addWhiteMage("Wrys", 7, 2,
-                new Staff("Fire", 2, 2, 2),10);
-        controller.addEngineer("Beck", 7, 4,
-                new Axe("Iron axe", 2, 2));
-        controller.addThief("Julian", 7, 4,
-                new Knife("Iron knife", 2, 2));
+        controller.addKnightWithSword("Draug",8, 6,
+                "Iron sword", 2, 2);
+        controller.addWhiteMageWithStaff("Wrys", 7, 2, 10,
+                "Fire", 2, 20, 2);
+        controller.addEngineerWithAxe("Beck", 7, 4,
+                "Iron axe", 2, 22);
+        controller.addThiefWithKnife("Julian", 7, 4,
+                "Iron knife", 2, 24);
+        
+        assertTrue(controller.isPartyReady());
+        assertFalse(controller.isPreparingParty());
 
-        // The following player characters won't get added to the party
-        assert controller.isPartyReady();
-        assert !controller.isPreparingParty();
-
-        controller.addBlackMage("Merric", 7, 2,
-                new Staff("Fire", 2, 2, 2), 10);
-        controller.addKnight("Roger", 8, 6,
-                new Sword("Iron sword", 2, 2));
-        controller.addWhiteMage("Lena", 7, 2,
-                new Staff("Fire", 2, 2, 2), 10);
-        controller.addEngineer("Jake", 7, 4,
-                new Axe("Iron axe", 2, 2));
-        controller.addThief("Rickard", 7, 4,
-                new Knife("Iron knife", 2, 2));
-
-        controller.addEnemy("Gharnef", 10, 4, 7, 10);
-        controller.addEnemy("Medeus", 15, 6, 30, 12);
+        for (int i=0; i<10; i++) {
+            // The first six bandits get added.
+            controller.addEnemy("Bandit", 10, 4, 7, 26);
+        }
 
         controller.addSword("Mercurius", 8, 10);
         controller.addAxe("Hauteclere", 16, 14);
@@ -67,11 +62,11 @@ class ControllerTest {
 
     @Test
     void getEnemyInfo() {
-        assertEquals("Gharnef", controller.getEnemyName(0));
+        assertEquals("Bandit", controller.getEnemyName(0));
         assertEquals(10, controller.getEnemyHealth(0));
         assertEquals(4, controller.getEnemyDefense(0));
         assertEquals(7, controller.getEnemyStrength(0));
-        assertEquals(10, controller.getEnemyWeight(0));
+        assertEquals(26, controller.getEnemyWeight(0));
     }
 
     @Test
@@ -96,33 +91,15 @@ class ControllerTest {
     }
 
     @Test
-    void KnightAttacksAllEnemies() {
-        assertEquals(10, controller.getEnemyHealth(0));
-        controller.attackAnEnemy(0, 0);
-        assertEquals(10, controller.getEnemyHealth(0));
-        controller.equipToCharacter(1, 0);
-        controller.attackAnEnemy(0, 0);
-        // Enemy 0 gets defeated, enemy 1 takes their place.
-        assertEquals(15, controller.getEnemyHealth(0));
-        controller.attackAnEnemy(0, 0);
-        assertEquals(5, controller.getEnemyHealth(0));
-        controller.attackAnEnemy(0, 0);
-        assert controller.isBattleWon();
+    void getDataForGUI() throws InterruptedException {
+        assertEquals("Knight.png", controller.getPlayerCharacterSprite(0));
+        assertEquals("Enemy.png", controller.getEnemySprite(0));
+        assertEquals(5, controller.getAmountOfWeapons());
+        controller.startGame();
+        Thread.sleep(1000);
+        assertEquals(0, controller.getActivePlayerCharIndex());
+        assertEquals("Draug", controller.getActivePlayerCharName());
+        assertEquals("Iron sword (Damage: 2)", controller.getActivePlayerCharWeaponData());
+        assertEquals("Sword.png", controller.getActivePlayerCharWeaponSprite());
     }
-
-    @Test
-    void EnemiesAttackAllPlayerCharacters() {
-        assertEquals(8, controller.getPlayerCharacterHealth(0));
-        controller.attackAPlayableCharacter(0, 0);
-        assertEquals(7, controller.getPlayerCharacterHealth(0));
-        controller.attackAPlayableCharacter(1, 0);
-        // Player character 0 gets defeated, character 1 takes their place.
-        assertEquals(7, controller.getPlayerCharacterHealth(2));
-        // Enemy 1 proceeds to kill everyone
-        controller.attackAPlayableCharacter(1, 0);
-        controller.attackAPlayableCharacter(1, 0);
-        controller.attackAPlayableCharacter(1, 0);
-        assert controller.isBattleLost();
-    }
-
 }

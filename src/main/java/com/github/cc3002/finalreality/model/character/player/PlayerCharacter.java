@@ -48,21 +48,24 @@ public abstract class PlayerCharacter extends AbstractCharacter implements IPlay
   }
 
   @Override
-  public void attack(Enemy opponent) {
+  public int attack(Enemy opponent) {
+    int dmgDealt = 0;
     if (this.equippedWeapon != null) {
       if (opponent.getHealth() > 0) {
-        opponent.getAttacked(this.equippedWeapon.getDamage());
+        dmgDealt = opponent.getAttacked(this.equippedWeapon.getDamage());
         if (opponent.getHealth() == 0) {
           event.firePropertyChange("Enemy defeated", null, opponent);
         }
       }
     }
+    return dmgDealt;
   }
 
   @Override
   public void waitTurn() {
     scheduledExecutor = Executors.newSingleThreadScheduledExecutor();
     scheduledExecutor.schedule(this::addToQueue, equippedWeapon.getWeight() / 10, TimeUnit.SECONDS);
+    event.firePropertyChange("Ended turn", null, null);
   }
 
   @Override

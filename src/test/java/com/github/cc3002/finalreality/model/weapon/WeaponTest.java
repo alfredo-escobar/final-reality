@@ -66,6 +66,7 @@ class WeaponTest extends AbstractSetUp {
     assertNotEquals(differentSpeedStaff, testStaff);
     assertNotEquals(differentMagDamageStaff, testStaff);
     assertNotEquals(testSword, testStaff);
+    assertNotEquals(testStaff, testSword);
   }
 
   @Test

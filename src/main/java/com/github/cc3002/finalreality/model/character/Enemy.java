@@ -60,23 +60,31 @@ public class Enemy extends AbstractCharacter {
   }
 
   /**
-   * Attacks a player character
+   * Attacks a player character and returns the damage dealt.
    * @param opponent
    *     the player character to be attacked
    */
-  public void attack(IPlayerCharacter opponent) {
+  public int attack(IPlayerCharacter opponent) {
+    int dmgDealt = 0;
     if (((ICharacter)opponent).getHealth() > 0) {
-      ((ICharacter)opponent).getAttacked(this.getStrength());
+      dmgDealt = ((ICharacter)opponent).getAttacked(this.getStrength());
       if (((ICharacter)opponent).getHealth() == 0) {
         event.firePropertyChange("Player character defeated", null, opponent);
       }
     }
+    return dmgDealt;
   }
 
   @Override
   public void waitTurn() {
     scheduledExecutor = Executors.newSingleThreadScheduledExecutor();
     scheduledExecutor.schedule(this::addToQueue, this.getWeight() / 10, TimeUnit.SECONDS);
+    event.firePropertyChange("Ended turn", null, null);
+  }
+
+  @Override
+  public String getSprite() {
+    return "Enemy.png";
   }
 
   @Override

@@ -71,6 +71,11 @@ public class BlackMage extends AbstractMage {
     }
 
     @Override
+    public String getSprite() {
+        return "BlackMage.png";
+    }
+
+    @Override
     public int hashCode() {
         return Objects.hash(super.hashCode(), BlackMage.class);
     }

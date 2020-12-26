@@ -66,6 +66,11 @@ public abstract class Weapon implements IWeapon{
   };
 
   @Override
+  public String getSprite() {
+    return " ";
+  }
+
+  @Override
   public boolean equals(final Object o) {
     if (this == o) {
       return true;
